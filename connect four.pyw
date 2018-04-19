@@ -2,6 +2,10 @@ import tkinter
 import tkinter.messagebox
 import random
 
+blue = "#00304A"
+red = "#F21B3F"
+yellow = "#EEE82C"
+
 grid = [0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,
@@ -68,55 +72,55 @@ def c7():
     print("!!!!c7")
 		
 		
-mainGrid = tkinter.Frame(bg="#00304A")
-button11 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c1)
-button12 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c1)
-button13 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c1)
-button14 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c1)
-button15 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c1)
-button16 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c1)
+mainGrid = tkinter.Frame(bg=blue)
+button11 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
+button12 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
+button13 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
+button14 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
+button15 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
+button16 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
 
-button21 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c2)
-button22 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c2)
-button23 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c2)
-button24 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c2)
-button25 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c2)
-button26 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c2)
+button21 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
+button22 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
+button23 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
+button24 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
+button25 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
+button26 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
 
-button31 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c3)
-button32 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c3)
-button33 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c3)
-button34 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c3)
-button35 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c3)
-button36 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c3)
+button31 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
+button32 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
+button33 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
+button34 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
+button35 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
+button36 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
 
-button41 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c4)
-button42 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c4)
-button43 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c4)
-button44 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c4)
-button45 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c4)
-button46 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c4)
+button41 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
+button42 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
+button43 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
+button44 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
+button45 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
+button46 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
 
-button51 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c5)
-button52 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c5)
-button53 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c5)
-button54 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c5)
-button55 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c5)
-button56 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c5)
+button51 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
+button52 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
+button53 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
+button54 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
+button55 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
+button56 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
 
-button61 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c6)
-button62 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c6)
-button63 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c6)
-button64 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c6)
-button65 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c6)
-button66 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c6)
+button61 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
+button62 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
+button63 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
+button64 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
+button65 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
+button66 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
 
-button71 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c7)
-button72 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c7)
-button73 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c7)
-button74 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c7)
-button75 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c7)
-button76 = tkinter.Button(mainGrid, height=4, width=8, bg="#00304A", command=c7)
+button71 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
+button72 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
+button73 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
+button74 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
+button75 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
+button76 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
 
 
 mainGrid.pack(expand=True)
@@ -176,6 +180,6 @@ except Exception as e:
     print(e)
 root.title("Connect Four")
 root.geometry("540x495")
-root["bg"]="#00304A"
+root["bg"]=blue
 root.minsize(width=540, height=495)
 root.mainloop()
