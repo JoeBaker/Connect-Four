@@ -76,19 +76,13 @@ mainGrid = tkinter.Frame(bg=blue)
 buttons = []
 
 for i in range(6):
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1))
-for i in range(6):
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2))
-for i in range(6):
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3))
-for i in range(6):
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4))
-for i in range(6):
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5))
-for i in range(6):
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6))
-for i in range(6):
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7))
+    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c1))
+    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c2))
+    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c3))
+    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c4))
+    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c5))
+    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c6))
+    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c7))
 
 mainGrid.pack(expand=True)
 
