@@ -16,6 +16,12 @@ score = [0,0]
 turn = random.choice([-1,1])
 root = tkinter.Tk()
 
+def whatColor():
+    global turn
+    if turn == -1:
+        return red
+    return yellow
+
 def hasWon(a):
     b = [a[0]+a[1]+a[2]+a[3], a[1]+a[2]+a[3]+a[4], a[2]+a[3]+a[4]+a[5], a[3]+a[4]+a[5]+a[6], ## horisontal -
          a[7]+a[8]+a[9]+a[10], a[8]+a[9]+a[10]+a[11], a[9]+a[10]+a[11]+a[12], a[10]+a[11]+a[12]+a[13],
@@ -50,32 +56,65 @@ def hasWon(a):
         print("no one has won")
         return 0
 
+def buttonPressed(a):
+    global grid
+    global buttons
+    global turn
+    color = whatColor()
+    while True:
+        if grid[a] == 0:
+            buttons[a].config(bg=color)
+            grid[a] = turn
+            print(grid)
+            turn = 0 - turn
+            break
+        else:
+            a -= 7
+        if a < 0:
+            break
+
 def c1():
     print("!!!!c1")
+    buttonPressed(35)
 
 def c2():
     print("!!!!c2")
+    buttonPressed(36)
 
 def c3():
     print("!!!!c3")
+    buttonPressed(37)
 
 def c4():
     print("!!!!c4")
+    buttonPressed(38)
 
 def c5():
     print("!!!!c5")
+    buttonPressed(39)
 
 def c6():
     print("!!!!c6")
+    buttonPressed(40)
 
 def c7():
     print("!!!!c7")
+    buttonPressed(41)
 		
 		
 mainGrid = tkinter.Frame(bg=blue)
 buttons = []
 
 for i in range(6):
+<<<<<<< HEAD
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1))
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2))
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3))
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4))
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5))
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6))
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7))
+=======
     buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c1))
     buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c2))
     buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c3))
@@ -83,13 +122,20 @@ for i in range(6):
     buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c5))
     buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c6))
     buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c7))
+>>>>>>> 2a80be441cb6b0360043b52097f553c5c89e2b40
 
 mainGrid.pack(expand=True)
 
 a = 0
+<<<<<<< HEAD
+for i in range(6):
+    for x in range(7):
+        buttons[a].grid(column=x, row=i, padx=5, pady=5)
+=======
 for i in range(7):
     for x in range(6):
         buttons[a].grid(column=i, row=x, padx=5, pady=5)
+>>>>>>> 2a80be441cb6b0360043b52097f553c5c89e2b40
         a += 1
 
 try:
@@ -98,6 +144,6 @@ except Exception as e:
     print(e)
 root.title("Connect Four")
 root.geometry("540x495")
-root["bg"]=blue
+root["bg"] = blue
 root.minsize(width=540, height=495)
 root.mainloop()
