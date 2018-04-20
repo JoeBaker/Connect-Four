@@ -73,106 +73,30 @@ def c7():
 		
 		
 mainGrid = tkinter.Frame(bg=blue)
-button11 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
-button12 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
-button13 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
-button14 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
-button15 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
-button16 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1)
+buttons = []
 
-button21 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
-button22 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
-button23 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
-button24 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
-button25 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
-button26 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2)
-
-button31 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
-button32 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
-button33 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
-button34 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
-button35 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
-button36 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3)
-
-button41 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
-button42 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
-button43 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
-button44 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
-button45 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
-button46 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4)
-
-button51 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
-button52 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
-button53 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
-button54 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
-button55 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
-button56 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5)
-
-button61 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
-button62 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
-button63 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
-button64 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
-button65 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
-button66 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6)
-
-button71 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
-button72 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
-button73 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
-button74 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
-button75 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
-button76 = tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7)
-
+for i in range(6):
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1))
+for i in range(6):
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2))
+for i in range(6):
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3))
+for i in range(6):
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4))
+for i in range(6):
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5))
+for i in range(6):
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6))
+for i in range(6):
+    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7))
 
 mainGrid.pack(expand=True)
-button11.grid(column=1, row=1, padx=5, pady=5)
-button12.grid(column=1, row=2, padx=5, pady=5)
-button13.grid(column=1, row=3, padx=5, pady=5)
-button14.grid(column=1, row=4, padx=5, pady=5)
-button15.grid(column=1, row=5, padx=5, pady=5)
-button16.grid(column=1, row=6, padx=5, pady=5)
 
-button21.grid(column=2, row=1, padx=5, pady=5)
-button22.grid(column=2, row=2, padx=5, pady=5)
-button23.grid(column=2, row=3, padx=5, pady=5)
-button24.grid(column=2, row=4, padx=5, pady=5)
-button25.grid(column=2, row=5, padx=5, pady=5)
-button26.grid(column=2, row=6, padx=5, pady=5)
-
-button31.grid(column=3, row=1, padx=5, pady=5)
-button32.grid(column=3, row=2, padx=5, pady=5)
-button33.grid(column=3, row=3, padx=5, pady=5)
-button34.grid(column=3, row=4, padx=5, pady=5)
-button35.grid(column=3, row=5, padx=5, pady=5)
-button36.grid(column=3, row=6, padx=5, pady=5)
-
-button41.grid(column=4, row=1, padx=5, pady=5)
-button42.grid(column=4, row=2, padx=5, pady=5)
-button43.grid(column=4, row=3, padx=5, pady=5)
-button44.grid(column=4, row=4, padx=5, pady=5)
-button45.grid(column=4, row=5, padx=5, pady=5)
-button46.grid(column=4, row=6, padx=5, pady=5)
-
-button51.grid(column=5, row=1, padx=5, pady=5)
-button52.grid(column=5, row=2, padx=5, pady=5)
-button53.grid(column=5, row=3, padx=5, pady=5)
-button54.grid(column=5, row=4, padx=5, pady=5)
-button55.grid(column=5, row=5, padx=5, pady=5)
-button56.grid(column=5, row=6, padx=5, pady=5)
-
-button61.grid(column=6, row=1, padx=5, pady=5)
-button62.grid(column=6, row=2, padx=5, pady=5)
-button63.grid(column=6, row=3, padx=5, pady=5)
-button64.grid(column=6, row=4, padx=5, pady=5)
-button65.grid(column=6, row=5, padx=5, pady=5)
-button66.grid(column=6, row=6, padx=5, pady=5)
-
-button71.grid(column=7, row=1, padx=5, pady=5)
-button72.grid(column=7, row=2, padx=5, pady=5)
-button73.grid(column=7, row=3, padx=5, pady=5)
-button74.grid(column=7, row=4, padx=5, pady=5)
-button75.grid(column=7, row=5, padx=5, pady=5)
-button76.grid(column=7, row=6, padx=5, pady=5)
-
+a = 0
+for i in range(7):
+    for x in range(6):
+        buttons[a].grid(column=i, row=x, padx=5, pady=5)
+        a += 1
 
 try:
     root.iconbitmap("assets/icon.ico")
