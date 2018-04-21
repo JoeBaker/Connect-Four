@@ -1,6 +1,5 @@
 import tkinter
-import tkinter.messagebox
-import random
+from random import choice
 
 blue = "#00304A"
 red = "#F21B3F"
@@ -13,7 +12,7 @@ grid = [0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,
         0,0,0,0,0,0,0]
 score = [0,0]
-turn = random.choice([-1,1])
+turn = choice([-1,1])
 root = tkinter.Tk()
 
 def whatColor():
@@ -21,6 +20,11 @@ def whatColor():
     if turn == -1:
         return red
     return yellow
+
+def turnString(a):
+    if a == -1:
+        return "red"
+    return "yellow"
 
 def hasWon(a):
     b = [a[0]+a[1]+a[2]+a[3], a[1]+a[2]+a[3]+a[4], a[2]+a[3]+a[4]+a[5], a[3]+a[4]+a[5]+a[6], ## horisontal -
@@ -56,57 +60,79 @@ def hasWon(a):
         print("no one has won")
         return 0
 
+def resetGrid():
+    global blue
+    global buttons
+    global grid
+    global turn
+    for i in range(42):
+        buttons[i].config(bg=blue)
+    grid = [0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0]
+    turn = choice([-1,1])
+
 def buttonPressed(a):
     global grid
     global buttons
+    global text
     global turn
+    global score
     color = whatColor()
     while True:
         if grid[a] == 0:
             buttons[a].config(bg=color)
             grid[a] = turn
-            print(grid)
+            won = hasWon(grid)
+            if won == 1:
+                resetGrid()
+                score[1] += 1
+                tkinter.messagebox.showinfo(title="Yellow has won.", message="Yellow has won.")
+            elif won == -1:
+                resetGrid()
+                score[0] += 1
+                tkinter.messagebox.showinfo(title="Red has won.", message="Red has won.\n")
             turn = 0 - turn
+            text.config(text="Red's score: "+str(score[0])+"\nYellow's score: "+str(score[1])+"\n"+turnString(turn)+"'s turn")
             break
         else:
             a -= 7
         if a < 0:
+            global blue
+            tkinter.messagebox.showinfo(title="You can't go here.", message="You can't go here because this column is full.\nTry going somewhere else.")
             break
 
 def c1():
-    print("!!!!c1")
     buttonPressed(35)
 
 def c2():
-    print("!!!!c2")
     buttonPressed(36)
 
 def c3():
-    print("!!!!c3")
     buttonPressed(37)
 
 def c4():
-    print("!!!!c4")
     buttonPressed(38)
 
 def c5():
-    print("!!!!c5")
     buttonPressed(39)
 
 def c6():
-    print("!!!!c6")
     buttonPressed(40)
 
 def c7():
-    print("!!!!c7")
     buttonPressed(41)
 		
 		
 mainGrid = tkinter.Frame(bg=blue)
 buttons = []
 
+text = tkinter.Label(text="Red's score: 0\nYellow's score: 0\n"+turnString(turn)+"'s turn", bg=blue, fg="white", font="Helvetica 9 bold")
+
 for i in range(6):
-<<<<<<< HEAD
     buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1))
     buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2))
     buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3))
@@ -114,28 +140,14 @@ for i in range(6):
     buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5))
     buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6))
     buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7))
-=======
-    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c1))
-    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c2))
-    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c3))
-    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c4))
-    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c5))
-    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c6))
-    buttons.append(tkinter.Button(mainGrid, text=(str(i)), height=4, width=8, bg=blue, command=c7))
->>>>>>> 2a80be441cb6b0360043b52097f553c5c89e2b40
 
+text.pack()
 mainGrid.pack(expand=True)
 
 a = 0
-<<<<<<< HEAD
 for i in range(6):
     for x in range(7):
         buttons[a].grid(column=x, row=i, padx=5, pady=5)
-=======
-for i in range(7):
-    for x in range(6):
-        buttons[a].grid(column=i, row=x, padx=5, pady=5)
->>>>>>> 2a80be441cb6b0360043b52097f553c5c89e2b40
         a += 1
 
 try:
@@ -143,7 +155,7 @@ try:
 except Exception as e:
     print(e)
 root.title("Connect Four")
-root.geometry("540x495")
+root.geometry("540x540")
 root["bg"] = blue
-root.minsize(width=540, height=495)
+root.minsize(width=540, height=540)
 root.mainloop()
