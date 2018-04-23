@@ -1,11 +1,14 @@
 import tkinter
 from tkinter import messagebox
 from random import choice
+import sys
+import os
 
 blue = "#00304A"
 red = "#F21B3F"
 yellow = "#EEE82C"
-
+color = ""
+coulmn = 0
 grid = [0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,
@@ -52,13 +55,10 @@ def hasWon(a):
          a[17]+a[23]+a[29]+a[35], a[18]+a[24]+a[30]+a[36], a[19]+a[25]+a[31]+a[37], a[20]+a[26]+a[32]+a[38]]
     
     if 4 in b:
-        print("1 has won")
         return 1
     elif -4 in b:
-        print("-1 has won")
         return -1
     else:
-        print("no one has won")
         return 0
 
 def resetGrid():
@@ -76,28 +76,86 @@ def resetGrid():
             0,0,0,0,0,0,0]
     turn = choice([-1,1])
 
+def fallAnimation():
+    global buttons
+    global color
+    global blue
+    global grid
+    global column
+    global mainGrid
+    fall = True
+    column += 7
+    try:
+        if not grid[column] == 0:
+            fall = False
+    except:
+        fall = False
+    if fall == True:
+        try:
+            buttons[column - 7].config(bg=blue)
+            buttons[column].config(bg=color)
+        except:
+            buttons[column].config(bg=color)
+        text.after(200, fallAnimation)
+    else:
+        endAnimation()
+
+def lockButtons():
+    global buttons
+    for i in range(42):
+        buttons[i].config(command=nothing)
+        
+
+def unlockButtons():
+    global buttons
+    for i in range(6):
+        buttons[(i*7)].config(command=c1)
+        buttons[(i*7)+1].config(command=c2)
+        buttons[(i*7)+2].config(command=c3)
+        buttons[(i*7)+3].config(command=c4)
+        buttons[(i*7)+4].config(command=c5)
+        buttons[(i*7)+5].config(command=c6)
+        buttons[(i*7)+6].config(command=c7)
+
+def endAnimation():
+    global buttons
+    global color
+    global blue
+    global grid
+    global column
+    global text
+    global mainGrid
+    global turn
+    grid[column-7] = turn
+    won = hasWon(grid)
+    if won == 1:
+        score[1] += 1
+        tkinter.messagebox.showinfo(title="Yellow has won.", message="Yellow has won.")
+        resetGrid()
+    elif won == -1:
+        score[0] += 1
+        tkinter.messagebox.showinfo(title="Red has won.", message="Red has won.\n")
+        resetGrid()
+    turn = 0 - turn
+    text.config(text="Red's score: "+str(score[0])+"\nYellow's score: "+str(score[1])+"\n"+turnString(turn)+"'s turn")
+    unlockButtons()
+
 def buttonPressed(a):
     global grid
     global buttons
     global text
     global turn
     global score
+    global color
     color = whatColor()
+    global column
     while True:
         if grid[a] == 0:
-            buttons[a].config(bg=color)
-            grid[a] = turn
-            won = hasWon(grid)
-            if won == 1:
-                resetGrid()
-                score[1] += 1
-                tkinter.messagebox.showinfo(title="Yellow has won.", message="Yellow has won.")
-            elif won == -1:
-                resetGrid()
-                score[0] += 1
-                tkinter.messagebox.showinfo(title="Red has won.", message="Red has won.\n")
-            turn = 0 - turn
-            text.config(text="Red's score: "+str(score[0])+"\nYellow's score: "+str(score[1])+"\n"+turnString(turn)+"'s turn")
+            text.config(text="Red's score: "+str(score[0])+"\nYellow's score: "+str(score[1])+"\n")
+            column = a
+            lockButtons()
+            buttons[column].config(bg=color)
+            fallAnimation()
             break
         else:
             a -= 7
@@ -107,26 +165,28 @@ def buttonPressed(a):
             break
 
 def c1():
-    buttonPressed(35)
+    buttonPressed(0)
 
 def c2():
-    buttonPressed(36)
+    buttonPressed(1)
 
 def c3():
-    buttonPressed(37)
+    buttonPressed(2)
 
 def c4():
-    buttonPressed(38)
+    buttonPressed(3)
 
 def c5():
-    buttonPressed(39)
+    buttonPressed(4)
 
 def c6():
-    buttonPressed(40)
+    buttonPressed(5)
 
 def c7():
-    buttonPressed(41)
-		
+    buttonPressed(6)
+
+def nothing():
+    print()	
 		
 mainGrid = tkinter.Frame(bg=blue)
 buttons = []
@@ -151,8 +211,13 @@ for i in range(6):
         buttons[a].grid(column=x, row=i, padx=5, pady=5)
         a += 1
 
+def path(relativePath):
+     if hasattr(sys, '_MEIPASS'):
+         return os.path.join(sys._MEIPASS, relativePath)
+     return os.path.join(os.path.abspath("."), relativePath)
+
 try:
-    root.iconbitmap("assets/icon.ico")
+    root.iconbitmap(path("assets\icon.ico"))
 except Exception as e:
     print(e)
 root.title("Connect Four")
