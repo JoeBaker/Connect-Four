@@ -155,7 +155,7 @@ def buttonPressed(a):
             column = a
             lockButtons()
             buttons[column].config(bg=color)
-            fallAnimation()
+            text.after(200, fallAnimation)
             break
         else:
             a -= 7
