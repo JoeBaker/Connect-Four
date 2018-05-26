@@ -134,7 +134,10 @@ def endAnimation():
         resetGrid()
     elif won == -1:
         score[0] += 1
-        tkinter.messagebox.showinfo(title="Red has won.", message="Red has won.\n")
+        tkinter.messagebox.showinfo(title="Red has won.", message="Red has won.")
+        resetGrid()
+    elif won == 0 and 0 not in grid:
+        tkinter.messagebox.showinfo(title="No one has won.", message="No one has won.")
         resetGrid()
     turn = 0 - turn
     text.config(text="Red's score: "+str(score[0])+"\nYellow's score: "+str(score[1])+"\n"+turnString(turn)+"'s turn")
