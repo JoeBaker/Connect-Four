@@ -16,14 +16,10 @@ root = tkinter.Tk()
 
 def whatColor():
     global turn
-    if turn == -1:
-        return red
-    return yellow
+    return {-1:red, 1:yellow}[turn]
 
 def turnString(a):
-    if a == -1:
-        return "red"
-    return "yellow"
+    return {-1:"red", 1:"yellow"}[a]
 
 def hasWon(g):
     for row in range(6):
@@ -55,8 +51,6 @@ def hasWon(g):
 
     return 0
 
-    
-
 def resetGrid():
     global blue
     global buttons
@@ -76,11 +70,11 @@ def fallAnimation():
     global mainGrid
     fall = True
     column += 7
+    fall = False
     try:
-        if not grid[column] == 0:
-            fall = False
-    except:
-        fall = False
+        if grid[column] == 0:
+            fall = True
+    except: pass
     if fall == True:
         try:
             buttons[column - 7].config(bg=blue)
@@ -164,11 +158,9 @@ for row in range(6):
 text.pack()
 mainGrid.pack(expand=True)
 
-a = 0
 for i in range(6):
     for x in range(7):
-        buttons[a].grid(column=x, row=i, padx=5, pady=5)
-        a += 1
+        buttons[(i*7)+x].grid(column=x, row=i, padx=5, pady=5)
 
 def path(relativePath):
      return os.path.join(os.path.abspath("."), relativePath)
