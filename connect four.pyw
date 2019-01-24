@@ -1,7 +1,8 @@
 import tkinter
 from tkinter import messagebox
-from random import choice
+import random
 import os
+import functools
 
 blue = "#00304A"
 red = "#F21B3F"
@@ -10,7 +11,7 @@ color = ""
 coulmn = 0
 grid = [0]*42
 score = [0,0]
-turn = choice([-1,1])
+turn = random.choice([-1,1])
 root = tkinter.Tk()
 
 def whatColor():
@@ -64,7 +65,7 @@ def resetGrid():
     for i in range(42):
         buttons[i].config(bg=blue)
     grid = [0]*42
-    turn = choice([-1,1])
+    turn = random.choice([-1,1])
 
 def fallAnimation():
     global buttons
@@ -93,19 +94,13 @@ def fallAnimation():
 def lockButtons():
     global buttons
     for i in range(42):
-        buttons[i].config(command=nothing)
+        buttons[i].config(state="disabled")
         
 
 def unlockButtons():
     global buttons
-    for i in range(6):
-        buttons[(i*7)].config(command=c1)
-        buttons[(i*7)+1].config(command=c2)
-        buttons[(i*7)+2].config(command=c3)
-        buttons[(i*7)+3].config(command=c4)
-        buttons[(i*7)+4].config(command=c5)
-        buttons[(i*7)+5].config(command=c6)
-        buttons[(i*7)+6].config(command=c7)
+    for i in range(42):
+        buttons[i].config(state="normal")
 
 def endAnimation():
     global buttons
@@ -156,44 +151,15 @@ def buttonPressed(a):
             global blue
             tkinter.messagebox.showinfo(title="You can't go here.", message="You can't go here because this column is full.\nTry going somewhere else.")
             break
-
-def c1():
-    buttonPressed(0)
-
-def c2():
-    buttonPressed(1)
-
-def c3():
-    buttonPressed(2)
-
-def c4():
-    buttonPressed(3)
-
-def c5():
-    buttonPressed(4)
-
-def c6():
-    buttonPressed(5)
-
-def c7():
-    buttonPressed(6)
-
-def nothing():
-    pass
 		
 mainGrid = tkinter.Frame(bg=blue)
 buttons = []
 
 text = tkinter.Label(text="Red's score: 0\nYellow's score: 0\n"+turnString(turn)+"'s turn", bg=blue, fg="white", font="Helvetica 9 bold")
 
-for i in range(6):
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c1))
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c2))
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c3))
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c4))
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c5))
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c6))
-    buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=c7))
+for row in range(6):
+    for column in range(7):
+        buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=blue, command=functools.partial(buttonPressed, column)))
 
 text.pack()
 mainGrid.pack(expand=True)
@@ -211,6 +177,7 @@ try:
     root.iconbitmap(path("assets\icon.ico"))
 except Exception as e:
     print(e)
+
 root.title("Connect Four")
 root.geometry("540x540")
 root["bg"] = blue
