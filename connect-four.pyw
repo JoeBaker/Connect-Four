@@ -2,7 +2,6 @@ import tkinter
 from tkinter import messagebox
 import random
 import os
-import functools
 
 class connectFour:
     root = tkinter.Tk()
@@ -10,7 +9,6 @@ class connectFour:
     colors = {"blue":"#00304A",
         "red":"#F21B3F",
         "yellow":"#EEE82C"}
-    coulmn = 0
     grid = [0]*42
     score = [0,0]
     turn = random.choice([-1,1])
@@ -20,69 +18,56 @@ class connectFour:
     root["bg"] = colors["blue"]
     root.minsize(width=540, height=540)
 
-    def whatColor(turn):
+    def whatColor(self):
+        name = {-1:"red", 1:"yellow"}[self.turn]
+        return {"hex":self.colors[name], "name":name}
+
+    def hasWon(g):
+        for row in range(6):
+            row *= 7
+            # Horizontal
+            for i in range(4):
+                a = g[row+i] + g[row+i+1] + g[row+i+2] + g[row+i+3]
+                if a in [-4, 4]:
+                    return a / 4
+            # Vertical
+            if row <= 14:
+                for i in range(7):
+                    a = g[row+i] + g[row+i+7] + g[row+i+14] + g[row+i+21]
+                    if a in [-4, 4]:
+                        return a / 4
+        # Diaginal
+        for row in range(4):
+            for i in range(3):
+                i *= 7
+                a = g[row+i] + g[row+i+8] + g[row+i+16] + g[row+i+24]
+                b = g[row+i+3] + g[row+i+9] + g[row+i+15] + g[row+i+21]
+                if a in [-4, 4]:
+                    return a / 4
+                if b in [-4, 4]:
+                    return b / 4
+        return 0
+
+    def resetGrid():
         self = connectFour
-        name = {-1:"red", 1:"yellow"}[turn]
-        return {"color":self.colors[name], "name":name}
+        for i in range(42):
+            self.buttons[i].config(bg=blue)
+        self.grid = [0]*42
+        self.turn = random.choice([-1,1])
 
-    # def hasWon(g):
-    #     for row in range(6):
-    #         row *= 7
+    def fallAnimation(self, place):
+        color = self.whatColor(self)
+        if not place < 7:
+            self.buttons[place - 7].config(bg=self.colors["blue"])
+        self.buttons[place].config(bg=color["hex"])
+        if self.grid[place + 7:place + 8] == [0]:
+            place += 7
+            self.mainGrid.after(300, lambda: self.fallAnimation(self, place))
+        else:
+            self.endAnimation(self, place)
 
-    #         # Horizontal
-    #         for i in range(4):
-    #             a = g[row+i] + g[row+i+1] + g[row+i+2] + g[row+i+3]
-    #             if a in [-4, 4]:
-    #                 return a / 4
-
-    #         # Vertical
-    #         if row <= 14:
-    #             for i in range(7):
-    #                 a = g[row+i] + g[row+i+7] + g[row+i+14] + g[row+i+21]
-    #                 if a in [-4, 4]:
-    #                     return a / 4
-
-    #     # Diaginal
-    #     for row in range(4):
-    #         for i in range(3):
-    #             i *= 7
-    #             a = g[row+i] + g[row+i+8] + g[row+i+16] + g[row+i+24]
-    #             b = g[row+i+3] + g[row+i+9] + g[row+i+15] + g[row+i+21]
-    #             if a in [-4, 4]:
-    #                 return a / 4
-    #             if b in [-4, 4]:
-    #                 return b / 4
-
-    #     return 0
-
-    # def resetGrid():
-    #     for i in range(42):
-    #         buttons[i].config(bg=blue)
-    #     grid = [0]*42
-    #     turn = random.choice([-1,1])
-
-    def fallAnimation():
-        self = connectFour
-        color = self.whatColor(self, self.turn)
-        print(color)
-    #     fall = True
-    #     column += 7
-    #     fall = False
-    #     try:
-    #         if grid[column] == 0:
-    #             fall = True
-    #     except: pass
-    #     if fall == True:
-    #         try:
-    #             buttons[column - 7].config(bg=blue)
-    #             buttons[column].config(bg=color)
-    #         except:
-    #             buttons[column].config(bg=color)
-    #         text.after(200, fallAnimation)
-    #     else:
-    #         endAnimation()
-
-    # def endAnimation():
+    def endAnimation(self, place):
+        pass
     #     grid[column-7] = turn
     #     won = hasWon(grid)
     #     if won == 1:
@@ -112,21 +97,7 @@ class connectFour:
             self.message("You can't go here", "You can't go here because this column is full.\nTry going somewhere else.")
             self.lockButtons(self, False)
         else:
-            self.mainGrid.after(200, self.fallAnimation)
-    #     while True:
-    #         if grid[a] == 0:
-    #             text.config(text="Red's score: "+str(score[0])+"\nYellow's score: "+str(score[1])+"\n")
-    #             column = a
-    #             lockButtons()
-    #             buttons[column].config(bg=color)
-    #             text.after(200, fallAnimation)
-    #             break
-    #         else:
-    #             a -= 7
-    #         if a < 0:
-    #             global blue
-    #             tkinter.messagebox.showinfo(title="You can't go here.", message="You can't go here because this column is full.\nTry going somewhere else.")
-    #             break
+            self.fallAnimation(self, column)
 
     def message(title, text):
         tkinter.messagebox.showinfo(title=title, message=message)
@@ -142,7 +113,7 @@ class connectFour:
     for row in range(6):
         for column in range(7):
             buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=colors["blue"],
-                command=functools.partial(buttonPressed, column)))
+                command=lambda arg=column: connectFour.buttonPressed(arg)))
             buttons[(row*7)+column].grid(column=column, row=row, padx=5, pady=5)
 
     try:
