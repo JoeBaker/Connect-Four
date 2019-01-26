@@ -6,21 +6,21 @@ import os
 class connectFour:
     root = tkinter.Tk()
 
-    colors = {"blue":"#00304A",
-        "red":"#F21B3F",
-        "yellow":"#EEE82C"}
+    colors = {"Blue":"#00304A",
+        "Red":"#F21B3F",
+        "Yellow":"#EEE82C"}
     grid = [0]*42
     score = [0,0]
     turn = random.choice([-1,1])
 
     root.title("Connect Four")
     root.geometry("540x540")
-    root["bg"] = colors["blue"]
+    root["bg"] = colors["Blue"]
     root.minsize(width=540, height=540)
 
     def whatColor(self):
-        name = {-1:"red", 1:"yellow"}[self.turn]
-        return {"hex":self.colors[name], "name":name}
+        name = {-1:"Red", 1:"Yellow"}[self.turn]
+        return {"hex":self.colors[name], "name":name, "turn":self.turn}
 
     def hasWon(g):
         for row in range(6):
@@ -48,42 +48,42 @@ class connectFour:
                     return b / 4
         return 0
 
-    def resetGrid():
-        self = connectFour
+    def resetGrid(self):
         for i in range(42):
-            self.buttons[i].config(bg=blue)
+            self.buttons[i].config(bg=self.colors["Blue"])
         self.grid = [0]*42
-        self.turn = random.choice([-1,1])
 
     def fallAnimation(self, place):
         color = self.whatColor(self)
         if not place < 7:
-            self.buttons[place - 7].config(bg=self.colors["blue"])
+            self.buttons[place - 7].config(bg=self.colors["Blue"])
         self.buttons[place].config(bg=color["hex"])
         if self.grid[place + 7:place + 8] == [0]:
             place += 7
             self.mainGrid.after(300, lambda: self.fallAnimation(self, place))
         else:
-            self.endAnimation(self, place)
+            self.grid[place] = self.turn
+            self.endAnimation(self, place, color)
 
-    def endAnimation(self, place):
-        pass
-    #     grid[column-7] = turn
-    #     won = hasWon(grid)
-    #     if won == 1:
-    #         score[1] += 1
-    #         tkinter.messagebox.showinfo(title="Yellow has won.", message="Yellow has won.")
-    #         resetGrid()
-    #     elif won == -1:
-    #         score[0] += 1
-    #         tkinter.messagebox.showinfo(title="Red has won.", message="Red has won.")
-    #         resetGrid()
-    #     elif won == 0 and 0 not in grid:
-    #         tkinter.messagebox.showinfo(title="No one has won.", message="No one has won.")
-    #         resetGrid()
-    #     turn = 0 - turn
-    #     text.config(text="Red's score: "+str(score[0])+"\nYellow's score: "+str(score[1])+"\n"+turnString(turn)+"'s turn")
-    #     unlockButtons()
+    def endAnimation(self, place, color):
+        won = self.hasWon(self.grid)
+        self.lockButtons(self, False)
+        self.turn = 0 - self.turn
+        if won != 0 or 0 not in self.grid:
+            if won != 0:
+                title = color["name"] + " has won"
+                scoreID = int((self.turn+3)/2-1)
+                self.score[scoreID] += 1
+                message = title + ("\nRed's score: "+str(self.score[0])+
+                    "\nYellow's score: "+str(self.score[1]))
+            else:
+                title, message = ["No one has won"]*2
+            self.text.config(text="Red's score: "+str(self.score[0])+
+                "\nYellow's score: "+str(self.score[1])+"\n")
+            self.message(title, message)
+            self.resetGrid(self)
+        self.text.config(text="Red's score: "+str(self.score[0])+"\nYellow's score: "+
+            str(self.score[1])+"\n"+{-1:"Red", 1:"Yellow"}[self.turn]+"'s turn")
 
     def lockButtons(self, lock):
         for i in range(42):
@@ -94,25 +94,26 @@ class connectFour:
         self.lockButtons(self, True)
         self.text.config(text="Red's score: "+str(self.score[0])+"\nYellow's score: "+str(self.score[1])+"\n")
         if self.grid[column] != 0:
-            self.message("You can't go here", "You can't go here because this column is full.\nTry going somewhere else.")
+            self.message("You can't go here", "You can't go here because this column is full."+
+                "\nTry going somewhere else.")
             self.lockButtons(self, False)
         else:
             self.fallAnimation(self, column)
 
-    def message(title, text):
+    def message(title, message):
         tkinter.messagebox.showinfo(title=title, message=message)
 
-    text = tkinter.Label(text="Red's score: 0\nYellow's score: 0\n"+{-1:"red", 1:"yellow"}[turn]+"'s turn")
-    text.config(bg=colors["blue"], fg="white", font="Helvetica 9 bold")
+    text = tkinter.Label(text="Red's score: 0\nYellow's score: 0\n"+{-1:"Red", 1:"Yellow"}[turn]+"'s turn")
+    text.config(bg=colors["Blue"], fg="white", font="Helvetica 9 bold")
     text.pack()
 
-    mainGrid = tkinter.Frame(bg=colors["blue"])
+    mainGrid = tkinter.Frame(bg=colors["Blue"])
     mainGrid.pack(expand=True)
     
     buttons = []
     for row in range(6):
         for column in range(7):
-            buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=colors["blue"],
+            buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=colors["Blue"],
                 command=lambda arg=column: connectFour.buttonPressed(arg)))
             buttons[(row*7)+column].grid(column=column, row=row, padx=5, pady=5)
 
