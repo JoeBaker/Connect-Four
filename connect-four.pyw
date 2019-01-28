@@ -68,7 +68,6 @@ class connectFour:
     def endAnimation(self, place, color):
         won = self.hasWon(self.grid)
         self.lockButtons(self, False)
-        self.turn = 0 - self.turn
         if won != 0 or 0 not in self.grid:
             if won != 0:
                 title = color["name"] + " has won"
@@ -82,6 +81,7 @@ class connectFour:
                 "\nYellow's score: "+str(self.score[1])+"\n")
             self.message(title, message)
             self.resetGrid(self)
+        self.turn = 0 - self.turn
         self.text.config(text="Red's score: "+str(self.score[0])+"\nYellow's score: "+
             str(self.score[1])+"\n"+{-1:"Red", 1:"Yellow"}[self.turn]+"'s turn")
 
