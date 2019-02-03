@@ -117,8 +117,13 @@ class connectFour:
                 command=lambda arg=column: connectFour.buttonPressed(arg)))
             buttons[(row*7)+column].grid(column=column, row=row, padx=5, pady=5)
 
+    def path(relativePath):
+        if hasattr(sys, '_MEIPASS'):
+            return os.path.join(sys._MEIPASS, relativePath)
+        return os.path.join(os.path.abspath("."), relativePath)
+    
     try:
-        root.iconbitmap(os.path.join(os.path.abspath("."), "assets\icon.ico"))
+        root.iconbitmap(path("assets/icon.ico"))
     except Exception as e: print(e)
 
 connectFour.root.mainloop()
