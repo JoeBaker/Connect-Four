@@ -2,6 +2,7 @@ import tkinter
 from tkinter import messagebox
 import random
 import os
+import sys
 
 class connectFour:
     root = tkinter.Tk()
@@ -14,9 +15,10 @@ class connectFour:
     turn = random.choice([-1,1])
 
     root.title("Connect Four")
-    root.geometry("540x540")
+    root.geometry("540x520")
     root["bg"] = colors["Blue"]
-    root.minsize(width=540, height=540)
+    root.minsize(width=540, height=520)
+    img = tkinter.PhotoImage()
 
     def whatColor(self):
         name = {-1:"Red", 1:"Yellow"}[self.turn]
@@ -103,18 +105,44 @@ class connectFour:
     def message(title, message):
         tkinter.messagebox.showinfo(title=title, message=message)
 
-    text = tkinter.Label(text="Red's score: 0\nYellow's score: 0\n"+{-1:"Red", 1:"Yellow"}[turn]+"'s turn")
-    text.config(bg=colors["Blue"], fg="white", font="Helvetica 9 bold")
-    text.pack()
+    frame = {}
+    frame["game"] = tkinter.Frame(bg=colors["Blue"])
+    frame["game"].grid(row=0, column=0, sticky="nesw")
 
-    mainGrid = tkinter.Frame(bg=colors["Blue"])
-    mainGrid.pack(expand=True)
+    frame["settings"] = tkinter.Frame(bg=colors["Blue"])
+    frame["settings"].grid(row=0, column=0, sticky="nesw")
+    text2 = tkinter.Label(frame["settings"], text="Settings", bg="#000000", fg="white")
+    text2.config()
+    text2.pack()
+    frame["game"].tkraise()
+
+    root.grid_columnconfigure(0, weight=1)
+    root.grid_rowconfigure(0, weight=1)
+
+    a = tkinter.Frame(frame["game"], bg=colors["Blue"], height=1, width=1)
+    a.grid(column=0, row=0, sticky="n")
+
+    text = tkinter.Label(a, text="Red's score: 0\nYellow's score: 0\n"+{-1:"Red", 1:"Yellow"}[turn]+"'s turn",
+        bg=colors["Blue"], fg="white", font="Helvetica 9 bold", padx=5, pady=5)
+    text.grid(column=1, row=0, sticky="n")
+    
+    b = tkinter.Frame(frame["game"], bg=colors["Blue"], height=1, width=1, padx=10, pady=10)
+    b.grid(column=0, row=0, sticky="nw")
+
+    settings = tkinter.Button(b, height=30, width=60, bg="#FFFFFF", image=img,
+        command=lambda: connectFour.frame["settings"].tkraise(), text="Settings")
+    settings.pack(side=tkinter.LEFT, anchor="nw", fill=tkinter.BOTH)
+
+    mainGrid = tkinter.Frame(frame["game"], bg=colors["Blue"])
+    mainGrid.grid(column=0, row=1)
+    frame["game"].grid_columnconfigure(0, weight=1)
+    frame["game"].grid_rowconfigure(1, weight=1)
     
     buttons = []
     for row in range(6):
         for column in range(7):
-            buttons.append(tkinter.Button(mainGrid, height=4, width=8, bg=colors["Blue"],
-                command=lambda arg=column: connectFour.buttonPressed(arg)))
+            buttons.append(tkinter.Button(mainGrid, height=60, width=60, bg=colors["Blue"],
+                command=lambda arg=column: connectFour.buttonPressed(arg), image=img))
             buttons[(row*7)+column].grid(column=column, row=row, padx=5, pady=5)
 
     def path(relativePath):
