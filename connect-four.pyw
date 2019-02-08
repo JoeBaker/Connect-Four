@@ -18,7 +18,8 @@ class connectFour:
     root.geometry("540x520")
     root["bg"] = colors["Blue"]
     root.minsize(width=540, height=520)
-    img = tkinter.PhotoImage()
+
+    # Functions
 
     def whatColor(self):
         name = {-1:"Red", 1:"Yellow"}[self.turn]
@@ -105,53 +106,104 @@ class connectFour:
     def message(title, message):
         tkinter.messagebox.showinfo(title=title, message=message)
 
-    frame = {}
-    frame["game"] = tkinter.Frame(bg=colors["Blue"])
-    frame["game"].grid(row=0, column=0, sticky="nesw")
-
-    frame["settings"] = tkinter.Frame(bg=colors["Blue"])
-    frame["settings"].grid(row=0, column=0, sticky="nesw")
-    text2 = tkinter.Label(frame["settings"], text="Settings", bg="#000000", fg="white")
-    text2.config()
-    text2.pack()
-    frame["game"].tkraise()
-
-    root.grid_columnconfigure(0, weight=1)
-    root.grid_rowconfigure(0, weight=1)
-
-    a = tkinter.Frame(frame["game"], bg=colors["Blue"], height=1, width=1)
-    a.grid(column=0, row=0, sticky="n")
-
-    text = tkinter.Label(a, text="Red's score: 0\nYellow's score: 0\n"+{-1:"Red", 1:"Yellow"}[turn]+"'s turn",
-        bg=colors["Blue"], fg="white", font="Helvetica 9 bold", padx=5, pady=5)
-    text.grid(column=1, row=0, sticky="n")
-    
-    b = tkinter.Frame(frame["game"], bg=colors["Blue"], height=1, width=1, padx=10, pady=10)
-    b.grid(column=0, row=0, sticky="nw")
-
-    settings = tkinter.Button(b, height=30, width=60, bg="#FFFFFF", image=img,
-        command=lambda: connectFour.frame["settings"].tkraise(), text="Settings")
-    settings.pack(side=tkinter.LEFT, anchor="nw", fill=tkinter.BOTH)
-
-    mainGrid = tkinter.Frame(frame["game"], bg=colors["Blue"])
-    mainGrid.grid(column=0, row=1)
-    frame["game"].grid_columnconfigure(0, weight=1)
-    frame["game"].grid_rowconfigure(1, weight=1)
-    
-    buttons = []
-    for row in range(6):
-        for column in range(7):
-            buttons.append(tkinter.Button(mainGrid, height=60, width=60, bg=colors["Blue"],
-                command=lambda arg=column: connectFour.buttonPressed(arg), image=img))
-            buttons[(row*7)+column].grid(column=column, row=row, padx=5, pady=5)
+    def changeWindow(name):
+        connectFour.frame[name].tkraise()
+        if name == "game":
+            name = "icon"
+        if name != "settings":
+            connectFour.root.title("Connect Four")
+        else:
+            connectFour.root.title("Connect Four - Settings")
+        try:
+            connectFour.root.iconbitmap(connectFour.path("assets/"+name+".ico"))
+        except Exception as e:
+            print(e)
 
     def path(relativePath):
         if hasattr(sys, '_MEIPASS'):
             return os.path.join(sys._MEIPASS, relativePath)
         return os.path.join(os.path.abspath("."), relativePath)
-    
+
+    # Load Button Images
+
+    try:
+        images = {"connect-four":tkinter.PhotoImage(file=path("assets/connect-four.gif")),
+            "settings":tkinter.PhotoImage(file=path("assets/settings.gif")),
+            "none":tkinter.PhotoImage(), "images":True}
+        images["settings"] = images["settings"].subsample(9)
+        images["connect-four"] = images["connect-four"].subsample(8)
+    except Exception as e:
+        images = {"none":tkinter.PhotoImage(), "images":False}
+        print(e, "\nAn error has occoured loading the image files.\nText will be used instead.")
+
     try:
         root.iconbitmap(path("assets/icon.ico"))
     except Exception as e: print(e)
+    
+    # Game Page
 
+    frame = {}
+    frame["game"] = tkinter.Frame(bg=colors["Blue"])
+    frame["game"].grid(row=0, column=0, sticky="nesw")
+    frame["game"].grid_columnconfigure(0, weight=1)
+    frame["game"].grid_rowconfigure(1, weight=1)
+    root.grid_columnconfigure(0, weight=1)
+    root.grid_rowconfigure(0, weight=1)
+
+    textFrame = tkinter.Frame(frame["game"], bg=colors["Blue"], height=1, width=1)
+    textFrame.grid(column=0, row=0, sticky="n")
+    text = tkinter.Label(textFrame, text="Red's score: 0\nYellow's score: 0\n"+{-1:"Red", 1:"Yellow"}[turn]+"'s turn",
+        bg=colors["Blue"], fg="white", font="Helvetica 9 bold", padx=5, pady=5)
+    text.grid(column=1, row=0, sticky="n")
+    
+    settingsFrame = tkinter.Frame(frame["game"], bg=colors["Blue"], height=1, width=1, padx=10, pady=10)
+    settingsFrame.grid(column=0, row=0, sticky="nw")
+    if images["images"]:
+        settings = tkinter.Button(settingsFrame, height=30, width=30, bg=colors["Blue"], image=images["settings"],
+            command=lambda name="settings": connectFour.changeWindow(name), borderwidth=0)
+    else:
+        settings = tkinter.Button(settingsFrame, height=30, width=60, bg=colors["Blue"], image=images["none"],
+            command=lambda name="settings": connectFour.changeWindow(name), borderwidth=0, text="Settings", compound="center",
+            font="Helvetica 9 bold", fg="#ffffff")
+    settings.pack(side=tkinter.LEFT, anchor="nw")
+
+    mainGrid = tkinter.Frame(frame["game"], bg=colors["Blue"])
+    mainGrid.grid(column=0, row=1)
+
+    buttons = []
+    for row in range(6):
+        for column in range(7):
+            buttons.append(tkinter.Button(mainGrid, height=60, width=60, bg=colors["Blue"],
+                command=lambda arg=column: connectFour.buttonPressed(arg), image=images["none"]))
+            buttons[(row*7)+column].grid(column=column, row=row, padx=5, pady=5)
+
+    # Settings Page
+
+    frame["settings"] = tkinter.Frame(bg=colors["Blue"])
+    frame["settings"].grid(row=0, column=0, sticky="nesw")
+    #frame["settings"].grid_columnconfigure(0, weight=1)
+    settingsHeaderGrid = tkinter.Frame(frame["settings"], bg=colors["Blue"])
+    settingsHeaderGrid.grid_columnconfigure(0, weight=1)
+    settingsHeaderGrid.pack(side=tkinter.TOP, fill="both")
+    
+    settingsTitleFrame = tkinter.Frame(settingsHeaderGrid, bg=colors["Blue"], height=1, width=1)
+    settingsTitleFrame.grid(column=0, row=0, sticky="n")
+    settingsTitle = tkinter.Label(settingsTitleFrame, text="Settings", bg=colors["Blue"], fg="white", font="Impact 28")
+    settingsTitle.grid(column=0, row=0, sticky="n")
+    
+    homeFrame = tkinter.Frame(settingsHeaderGrid, bg=colors["Blue"], height=1, width=1, padx=10, pady=10)
+    homeFrame.grid(column=0, row=0, sticky="nw")
+    if images["images"]:
+        home = tkinter.Button(homeFrame, height=30, width=30, bg=colors["Blue"], image=images["connect-four"],
+            command=lambda name="game": connectFour.changeWindow(name), borderwidth=0)
+    else:
+        home = tkinter.Button(homeFrame, height=30, width=90, bg=colors["Blue"], image=images["none"],
+            command=lambda name="game": connectFour.changeWindow(name), borderwidth=0, text="Back to game",
+            compound="center", font="Helvetica 9 bold", fg="#ffffff")
+    home.pack(side=tkinter.LEFT, anchor="nw")
+
+    text1 = tkinter.Label(frame["settings"], text="Settings", bg=colors["Blue"], fg="white", font="Helvetica 9 bold")
+    text1.pack(anchor="nw")
+
+connectFour.frame["game"].tkraise()
 connectFour.root.mainloop()
