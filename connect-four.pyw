@@ -107,15 +107,16 @@ class connectFour:
         tkinter.messagebox.showinfo(title=title, message=message)
 
     def changeWindow(name):
-        connectFour.frame[name].tkraise()
+        self = connectFour
+        self.frame[name].tkraise()
         if name == "game":
             name = "icon"
-        if name != "settings":
-            connectFour.root.title("Connect Four")
+            self.root.title("Connect Four")
+            self.updateSettings(self)
         else:
-            connectFour.root.title("Connect Four - Settings")
+            self.root.title("Connect Four - Settings")
         try:
-            connectFour.root.iconbitmap(connectFour.path("assets/"+name+".ico"))
+            self.root.iconbitmap(self.path("assets/"+name+".ico"))
         except Exception as e:
             print(e)
 
@@ -123,6 +124,30 @@ class connectFour:
         if hasattr(sys, '_MEIPASS'):
             return os.path.join(sys._MEIPASS, relativePath)
         return os.path.join(os.path.abspath("."), relativePath)
+
+    def isColor(color):
+        if color[0] == "#":
+            color = color[1:]
+        if len(color) == 6:
+            for character in color:
+                if character.upper() not in "0123456789ABCDEF":
+                    return False
+            return True
+        return False
+
+
+    def updateSettings(self):
+        #for setting in self.settings:
+        #    print(setting, self.settings[setting].get())
+
+        #for color in ["p1", "p2", "bg"]
+        self.colors["Blue"] = self.settings["bg"].get()
+        for item in [self.frame["game"], self.textFrame, self.text, self.settingsFrame, self.settingsButton, self.mainGrid]:
+            item.config(bg=self.settings["bg"].get())
+
+        self.colors["Red"] = self.settings["p1"].get()
+        self.colors["Yellow"] = self.settings["p2"].get()
+        self.root.attributes('-alpha', self.settings["alpha"].get())
 
     # Load Button Images
 
@@ -159,13 +184,13 @@ class connectFour:
     settingsFrame = tkinter.Frame(frame["game"], bg=colors["Blue"], height=1, width=1, padx=10, pady=10)
     settingsFrame.grid(column=0, row=0, sticky="nw")
     if images["images"]:
-        settings = tkinter.Button(settingsFrame, height=30, width=30, bg=colors["Blue"], image=images["settings"],
+        settingsButton = tkinter.Button(settingsFrame, height=30, width=30, bg=colors["Blue"], image=images["settings"],
             command=lambda name="settings": connectFour.changeWindow(name), borderwidth=0)
     else:
-        settings = tkinter.Button(settingsFrame, height=30, width=60, bg=colors["Blue"], image=images["none"],
-            command=lambda name="settings": connectFour.changeWindow(name), borderwidth=0, text="Settings", compound="center",
-            font="Helvetica 9 bold", fg="#ffffff")
-    settings.pack(side=tkinter.LEFT, anchor="nw")
+        settingsButton = tkinter.Button(settingsFrame, height=30, width=60, bg=colors["Blue"], image=images["none"],
+            command=lambda name="settings": connectFour.changeWindow(name), borderwidth=0, text="Settings",
+            compound="center", font="Helvetica 9 bold", fg="#ffffff")
+    settingsButton.pack(side=tkinter.LEFT, anchor="nw")
 
     mainGrid = tkinter.Frame(frame["game"], bg=colors["Blue"])
     mainGrid.grid(column=0, row=1)
@@ -181,7 +206,6 @@ class connectFour:
 
     frame["settings"] = tkinter.Frame(bg=colors["Blue"])
     frame["settings"].grid(row=0, column=0, sticky="nesw")
-    #frame["settings"].grid_columnconfigure(0, weight=1)
     settingsHeaderGrid = tkinter.Frame(frame["settings"], bg=colors["Blue"])
     settingsHeaderGrid.grid_columnconfigure(0, weight=1)
     settingsHeaderGrid.pack(side=tkinter.TOP, fill="both")
@@ -202,8 +226,38 @@ class connectFour:
             compound="center", font="Helvetica 9 bold", fg="#ffffff")
     home.pack(side=tkinter.LEFT, anchor="nw")
 
-    text1 = tkinter.Label(frame["settings"], text="Settings", bg=colors["Blue"], fg="white", font="Helvetica 9 bold")
-    text1.pack(anchor="nw")
+    menu = []
+    variables = ["bg", "p1", "p2", "alpha"]
+    settings = {}
+    for var in variables:
+        settings[var] = tkinter.StringVar()
+    del variables
+
+    settings["bg"].set("#00304A")
+    settings["p1"].set("#F21B3F")
+    settings["p2"].set("#EEE82C")
+    settings["alpha"].set("1")
+
+    menu.append(tkinter.Label(frame["settings"], text="(Hex Color) Background Color", bg=colors["Blue"],
+        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
+    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["bg"], font="Helvetica 9 bold",
+        width = 8).pack(padx=15, anchor="nw"))
+    
+    menu.append(tkinter.Label(frame["settings"], text="(Hex Color) Player 1 Color", bg=colors["Blue"],
+        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
+    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["p1"], font="Helvetica 9 bold",
+        width = 8).pack(padx=15, anchor="nw"))
+
+    menu.append(tkinter.Label(frame["settings"], text="(Hex Color) Player 2 Color", bg=colors["Blue"],
+        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
+    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["p2"], font="Helvetica 9 bold",
+        width = 8).pack(padx=15, anchor="nw"))
+
+    menu.append(tkinter.Label(frame["settings"], text="Transparency (Number between 0 and 1)", bg=colors["Blue"],
+        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
+    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["alpha"], font="Helvetica 9 bold",
+        width = 5).pack(padx=15, anchor="nw"))
+    
 
 connectFour.frame["game"].tkraise()
 connectFour.root.mainloop()
