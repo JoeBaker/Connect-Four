@@ -135,19 +135,35 @@ class connectFour:
             return True
         return False
 
+    def reColorGrid(self):
+        for place in range(42):
+            print(place)
+            color = {-1:self.colors["Red"], 0:self.colors["Blue"], 1:self.colors["Yellow"]}[self.grid[place]]
+            self.buttons[place].config(bg=color)
 
     def updateSettings(self):
-        #for setting in self.settings:
-        #    print(setting, self.settings[setting].get())
+        if self.isColor(self.settings["bg"].get()):
+            self.colors["Blue"] = self.settings["bg"].get()
+            for item in [self.frame["game"], self.textFrame, self.text, self.settingsFrame, self.settingsButton, self.mainGrid]:
+                item.config(bg=self.settings["bg"].get())
+        else:
+            self.settings["bg"].set(self.colors["Blue"])
 
-        #for color in ["p1", "p2", "bg"]
-        self.colors["Blue"] = self.settings["bg"].get()
-        for item in [self.frame["game"], self.textFrame, self.text, self.settingsFrame, self.settingsButton, self.mainGrid]:
-            item.config(bg=self.settings["bg"].get())
+        if self.isColor(self.settings["p1"].get()):
+            self.colors["Red"] = self.settings["p1"].get()
+        else:
+            self.settings["p1"].set(self.colors["Red"])
 
-        self.colors["Red"] = self.settings["p1"].get()
-        self.colors["Yellow"] = self.settings["p2"].get()
-        self.root.attributes('-alpha', self.settings["alpha"].get())
+        if self.isColor(self.settings["p2"].get()):
+            self.colors["Yellow"] = self.settings["p2"].get()
+        else:
+            self.settings["p2"].set(self.colors["Yellow"])
+        self.reColorGrid(self)
+
+        if 0 < int(self.settings["alpha"].get()) <= 1:
+            self.root.attributes('-alpha', self.settings["alpha"].get())
+        else:
+            self.settings["alpha"].set("1")
 
     # Load Button Images
 
