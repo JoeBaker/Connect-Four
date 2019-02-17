@@ -9,7 +9,7 @@ class connectFour:
 
     colors = {"bg":"#00304A",
         "p1":"#F21B3F",
-        "p2":"#EEE82C"}
+        "p2":"#EEEEEE"}#EEE82C
     names = ["Red", "Yellow"]
     grid = [0]*42
     score = [0,0]
@@ -157,7 +157,7 @@ class connectFour:
             self.settings["p1"].set(self.colors["p1"])
 
         if self.isColor(self.settings["p2"].get()):
-            self.colors["02"] = self.settings["p2"].get()
+            self.colors["p2"] = self.settings["p2"].get()
         else:
             self.settings["p2"].set(self.colors["p2"])
         self.reColorGrid(self)
