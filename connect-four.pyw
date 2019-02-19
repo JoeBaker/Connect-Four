@@ -9,7 +9,7 @@ class connectFour:
 
     colors = {"bg":"#00304A",
         "p1":"#F21B3F",
-        "p2":"#EEEEEE"}#EEE82C
+        "p2":"#EEE82C"}
     names = ["Red", "Yellow"]
     grid = [0]*42
     score = [0,0]
@@ -151,31 +151,28 @@ class connectFour:
         else:
             self.settings["bg"].set(self.colors["bg"])
 
-        if self.isColor(self.settings["p1"].get()):
-            self.colors["p1"] = self.settings["p1"].get()
-        else:
-            self.settings["p1"].set(self.colors["p1"])
+        for player in ["p1", "p2"]:
+            if self.isColor(self.settings[player].get()):
+                self.colors[player] = self.settings[player].get()
+            else:
+                self.settings[player].set(self.colors[player])
 
-        if self.isColor(self.settings["p2"].get()):
-            self.colors["p2"] = self.settings["p2"].get()
-        else:
-            self.settings["p2"].set(self.colors["p2"])
-        self.reColorGrid(self)
+            nameIndex = {"p1":0, "p2":1}[player]
+            if 0 < len(self.settings[player+"Name"].get()) <= 32:
+                self.names[nameIndex] = self.settings[player+"Name"].get()
+            else:
+                self.settings[player+"Name"].set(self.names[nameIndex])
 
-        if 0 < int(self.settings["alpha"].get()) <= 1:
-            self.root.attributes('-alpha', self.settings["alpha"].get())
-        else:
+        try:
+            if 0 < float(self.settings["alpha"].get()) <= 1:
+                self.root.attributes('-alpha', self.settings["alpha"].get())
+            else:    
+                self.root.attributes('-alpha', 1)
+                self.settings["alpha"].set("1")
+        except:
+            self.root.attributes('-alpha', 1)
             self.settings["alpha"].set("1")
-
-        if 0 < len(self.settings["p1Name"].get()) <= 32:
-            self.names[0] = self.settings["p1Name"].get()
-        else:
-            self.settings["p1Name"].set(self.names[0])
-
-        if 0 < len(self.settings["p2Name"].get()) <= 32:
-            self.names[1] = self.settings["p2Name"].get()
-        else:
-            self.settings["p2Name"].set(self.names[1])
+            
         self.text.config(text=self.names[0]+"'s score: "+str(self.score[0])+"\n"+self.names[1]+"'s score: "+
             str(self.score[1])+"\n"+{-1:self.names[0], 1:self.names[1]}[self.turn]+"'s turn")
 
