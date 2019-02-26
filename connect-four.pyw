@@ -14,6 +14,7 @@ class connectFour:
     grid = [0]*42
     score = [0,0]
     turn = random.choice([-1,1])
+    fall = 300
 
     root.title("Connect Four")
     root.geometry("540x520")
@@ -65,7 +66,7 @@ class connectFour:
         self.buttons[place].config(bg=color["hex"])
         if self.grid[place + 7:place + 8] == [0]:
             place += 7
-            self.mainGrid.after(300, lambda: self.fallAnimation(self, place))
+            self.mainGrid.after(self.fall, lambda: self.fallAnimation(self, place))
         else:
             self.grid[place] = self.turn
             self.endAnimation(self, place, color)
@@ -172,7 +173,14 @@ class connectFour:
         except:
             self.root.attributes('-alpha', 1)
             self.settings["alpha"].set("1")
-            
+
+        try:
+            self.fall = int(self.settings["fall"].get())
+        except:
+            self.fall = 300
+            self.settings["fall"].set("300")
+
+        self.reColorGrid(self)
         self.text.config(text=self.names[0]+"'s score: "+str(self.score[0])+"\n"+self.names[1]+"'s score: "+
             str(self.score[1])+"\n"+{-1:self.names[0], 1:self.names[1]}[self.turn]+"'s turn")
 
@@ -254,7 +262,7 @@ class connectFour:
     home.pack(side=tkinter.LEFT, anchor="nw")
 
     menu = []
-    variables = ["bg", "p1", "p2", "alpha", "p1Name", "p2Name"]
+    variables = ["bg", "p1", "p2", "alpha", "p1Name", "p2Name", "fall"]
     settings = {}
     for var in variables:
         settings[var] = tkinter.StringVar()
@@ -266,18 +274,19 @@ class connectFour:
     settings["alpha"].set("1")
     settings["p1Name"].set(names[0])
     settings["p2Name"].set(names[1])
+    settings["fall"].set("300")
 
-    menu.append(tkinter.Label(frame["settings"], text="(Hex Color) Background Color", bg=colors["bg"],
+    menu.append(tkinter.Label(frame["settings"], text="Background Color (Hex Color)", bg=colors["bg"],
         fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
     menu.append(tkinter.Entry(frame["settings"], textvariable=settings["bg"], font="Helvetica 9 bold",
         width = 8).pack(padx=15, anchor="nw"))
     
-    menu.append(tkinter.Label(frame["settings"], text="(Hex Color) Player 1 Color", bg=colors["bg"],
+    menu.append(tkinter.Label(frame["settings"], text="Player 1's Color (Hex Color)", bg=colors["bg"],
         fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
     menu.append(tkinter.Entry(frame["settings"], textvariable=settings["p1"], font="Helvetica 9 bold",
         width = 8).pack(padx=15, anchor="nw"))
 
-    menu.append(tkinter.Label(frame["settings"], text="(Hex Color) Player 2 Color", bg=colors["bg"],
+    menu.append(tkinter.Label(frame["settings"], text="Player 2's Color (Hex Color)", bg=colors["bg"],
         fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
     menu.append(tkinter.Entry(frame["settings"], textvariable=settings["p2"], font="Helvetica 9 bold",
         width = 8).pack(padx=15, anchor="nw"))
@@ -296,6 +305,11 @@ class connectFour:
         fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
     menu.append(tkinter.Entry(frame["settings"], textvariable=settings["p2Name"], font="Helvetica 9 bold",
         width = 32).pack(padx=15, anchor="nw"))
+
+    menu.append(tkinter.Label(frame["settings"], text="Fall Speed (Milliseconds)", bg=colors["bg"],
+        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
+    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["fall"], font="Helvetica 9 bold",
+        width = 8).pack(padx=15, anchor="nw"))
     
 
 connectFour.frame["game"].tkraise()
