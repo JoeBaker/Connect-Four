@@ -240,13 +240,20 @@ class connectFour:
     # Settings Page
 
     frame["settings"] = tkinter.Frame(bg=colors["bg"])
-    frame["settings"].grid(row=0, column=0, sticky="nesw")
+    frame["settings"].grid(row=0, column=0, sticky="snew")
+
+    scrollbar = tkinter.Scrollbar(frame["settings"], orient="vertical")
+    scrollbar.pack(side="right", fill="y")
+
     settingsHeaderGrid = tkinter.Frame(frame["settings"], bg=colors["bg"])
-    settingsHeaderGrid.grid_columnconfigure(0, weight=1)
-    settingsHeaderGrid.pack(side=tkinter.TOP, fill="both")
+    settingsHeaderGrid.grid_columnconfigure(1, weight=1)
+    settingsHeaderGrid.pack(side="top", fill="x")
+
+    alignmentFrame = tkinter.Frame(settingsHeaderGrid, bg=colors["bg"], width=34)
+    alignmentFrame.grid(column=2, row=0, sticky="ne")
     
     settingsTitleFrame = tkinter.Frame(settingsHeaderGrid, bg=colors["bg"], height=1, width=1)
-    settingsTitleFrame.grid(column=0, row=0, sticky="n")
+    settingsTitleFrame.grid(column=1, row=0, sticky="n")
     settingsTitle = tkinter.Label(settingsTitleFrame, text="Settings", bg=colors["bg"], fg="white", font="Impact 28")
     settingsTitle.grid(column=0, row=0, sticky="n")
     
@@ -276,41 +283,59 @@ class connectFour:
     settings["p2Name"].set(names[1])
     settings["fall"].set("300")
 
-    menu.append(tkinter.Label(frame["settings"], text="Background Color (Hex Color)", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
-    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["bg"], font="Helvetica 9 bold",
-        width = 8).pack(padx=15, anchor="nw"))
+    canvas = tkinter.Canvas(frame["settings"], height=1000, bg=colors["bg"],
+        scrollregion=(0, 0, 0, 1000), highlightthickness=0)
+ 
+    canvas.pack(anchor="nw")
+    scrollbar.config(command=canvas.yview)
+    canvas.config(yscrollcommand=scrollbar.set)
+
+    canvas.configure(scrollregion=canvas.bbox("all"))#
+
+    canvasFrame= tkinter.Frame(canvas, bg=colors["bg"])
+    canvas.create_window((0,0),window=canvasFrame,anchor='nw')
+
+
+    canvasFrame.bind("<Configure>",(lambda event: connectFour.canvas.configure(scrollregion=connectFour.canvas.bbox("all"))))
+
+    menu.append(tkinter.Label(canvasFrame, text="Background Color (Hex Color)", bg=colors["bg"],
+        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
+    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["bg"], font="Helvetica 9 bold",
+        width = 8).pack(padx=10, anchor="nw"))
     
-    menu.append(tkinter.Label(frame["settings"], text="Player 1's Color (Hex Color)", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
-    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["p1"], font="Helvetica 9 bold",
-        width = 8).pack(padx=15, anchor="nw"))
+    menu.append(tkinter.Label(canvasFrame, text="Player 1's Color (Hex Color)", bg=colors["bg"],
+        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
+    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["p1"], font="Helvetica 9 bold",
+        width = 8).pack(padx=10, anchor="nw"))
 
-    menu.append(tkinter.Label(frame["settings"], text="Player 2's Color (Hex Color)", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
-    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["p2"], font="Helvetica 9 bold",
-        width = 8).pack(padx=15, anchor="nw"))
+    menu.append(tkinter.Label(canvasFrame, text="Player 2's Color (Hex Color)", bg=colors["bg"],
+        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
+    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["p2"], font="Helvetica 9 bold",
+        width = 8).pack(padx=10, anchor="nw"))
 
-    menu.append(tkinter.Label(frame["settings"], text="Transparency (Number between 0 and 1)", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
-    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["alpha"], font="Helvetica 9 bold",
-        width = 5).pack(padx=15, anchor="nw"))
+    menu.append(tkinter.Label(canvasFrame, text="Transparency (Number between 0 and 1)", bg=colors["bg"],
+        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
+    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["alpha"], font="Helvetica 9 bold",
+        width = 5).pack(padx=10, anchor="nw"))
 
-    menu.append(tkinter.Label(frame["settings"], text="Player 1's name", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
-    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["p1Name"], font="Helvetica 9 bold",
-        width = 32).pack(padx=15, anchor="nw"))
+    menu.append(tkinter.Label(canvasFrame, text="Player 1's name", bg=colors["bg"],
+        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
+    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["p1Name"], font="Helvetica 9 bold",
+        width = 32).pack(padx=10, anchor="nw"))
 
-    menu.append(tkinter.Label(frame["settings"], text="Player 2's name", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
-    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["p2Name"], font="Helvetica 9 bold",
-        width = 32).pack(padx=15, anchor="nw"))
+    menu.append(tkinter.Label(canvasFrame, text="Player 2's name", bg=colors["bg"],
+        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
+    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["p2Name"], font="Helvetica 9 bold",
+        width = 32).pack(padx=10, anchor="nw"))
 
-    menu.append(tkinter.Label(frame["settings"], text="Fall Speed (Milliseconds)", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=10, anchor="nw"))
-    menu.append(tkinter.Entry(frame["settings"], textvariable=settings["fall"], font="Helvetica 9 bold",
-        width = 8).pack(padx=15, anchor="nw"))
-    
+    menu.append(tkinter.Label(canvasFrame, text="Fall Speed (Milliseconds)", bg=colors["bg"],
+        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
+    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["fall"], font="Helvetica 9 bold",
+        width = 8).pack(padx=10, anchor="nw"))
+
+    menu.append(tkinter.Label(canvasFrame, text="\nConnect Four by Joe Baker\nhttps://github.com/JoeBaker/connect-four",
+        bg=colors["bg"], fg="white", font="Helvetica 9 bold", justify="left").pack(padx=5, anchor="nw"))
+
 
 connectFour.frame["game"].tkraise()
 connectFour.root.mainloop()
