@@ -9,7 +9,8 @@ class connectFour:
 
     colors = {"bg":"#00304A",
         "p1":"#F21B3F",
-        "p2":"#EEE82C"}
+        "p2":"#EEE82C",
+        "text":"#FFFFFF"}
     names = ["Red", "Yellow"]
     grid = [0]*42
     score = [0,0]
@@ -104,11 +105,10 @@ class connectFour:
             self.message("You can't go here", "You can't go here because this column is full."+
                 "\nTry going somewhere else.")
             self.lockButtons(self, False)
+            self.text.config(text=self.names[0]+"'s score: "+str(self.score[0])+"\n"+self.names[1]+"'s score: "+
+                str(self.score[1])+"\n"+{-1:self.names[0], 1:self.names[1]}[self.turn]+"'s turn")
         else:
             self.fallAnimation(self, column)
-
-    def message(title, message):
-        tkinter.messagebox.showinfo(title=title, message=message)
 
     def changeWindow(name):
         self = connectFour
@@ -152,6 +152,12 @@ class connectFour:
         else:
             self.settings["bg"].set(self.colors["bg"])
 
+        if self.isColor(self.settings["text"].get()):
+            self.colors["text"] = self.settings["text"].get()
+            self.text.config(fg=self.colors["text"])
+        else:
+            self.settings["text"].set(self.colors["text"])
+
         for player in ["p1", "p2"]:
             if self.isColor(self.settings[player].get()):
                 self.colors[player] = self.settings[player].get()
@@ -183,6 +189,10 @@ class connectFour:
         self.reColorGrid(self)
         self.text.config(text=self.names[0]+"'s score: "+str(self.score[0])+"\n"+self.names[1]+"'s score: "+
             str(self.score[1])+"\n"+{-1:self.names[0], 1:self.names[1]}[self.turn]+"'s turn")
+
+    # Lambdas
+
+    message = lambda title, message: tkinter.messagebox.showinfo(title=title, message=message)
 
     # Load Button Images
 
@@ -269,69 +279,39 @@ class connectFour:
     home.pack(side=tkinter.LEFT, anchor="nw")
 
     menu = []
-    variables = ["bg", "p1", "p2", "alpha", "p1Name", "p2Name", "fall"]
+    variables = ["bg", "text", "p1", "p2", "p1Name", "p2Name", "fall", "alpha"]
     settings = {}
     for var in variables:
         settings[var] = tkinter.StringVar()
     del variables
 
     settings["bg"].set("#00304A")
+    settings["text"].set("#FFFFFF")
     settings["p1"].set("#F21B3F")
     settings["p2"].set("#EEE82C")
-    settings["alpha"].set("1")
     settings["p1Name"].set(names[0])
     settings["p2Name"].set(names[1])
     settings["fall"].set("300")
+    settings["alpha"].set("1")
 
     canvas = tkinter.Canvas(frame["settings"], height=1000, bg=colors["bg"],
         scrollregion=(0, 0, 0, 1000), highlightthickness=0)
- 
     canvas.pack(anchor="nw")
     scrollbar.config(command=canvas.yview)
     canvas.config(yscrollcommand=scrollbar.set)
-
-    canvas.configure(scrollregion=canvas.bbox("all"))#
-
+    canvas.configure(scrollregion=canvas.bbox("all"))
     canvasFrame= tkinter.Frame(canvas, bg=colors["bg"])
     canvas.create_window((0,0),window=canvasFrame,anchor='nw')
-
-
     canvasFrame.bind("<Configure>",(lambda event: connectFour.canvas.configure(scrollregion=connectFour.canvas.bbox("all"))))
 
-    menu.append(tkinter.Label(canvasFrame, text="Background Color (Hex Color)", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
-    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["bg"], font="Helvetica 9 bold",
-        width = 8).pack(padx=10, anchor="nw"))
-    
-    menu.append(tkinter.Label(canvasFrame, text="Player 1's Color (Hex Color)", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
-    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["p1"], font="Helvetica 9 bold",
-        width = 8).pack(padx=10, anchor="nw"))
-
-    menu.append(tkinter.Label(canvasFrame, text="Player 2's Color (Hex Color)", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
-    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["p2"], font="Helvetica 9 bold",
-        width = 8).pack(padx=10, anchor="nw"))
-
-    menu.append(tkinter.Label(canvasFrame, text="Transparency (Number between 0 and 1)", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
-    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["alpha"], font="Helvetica 9 bold",
-        width = 5).pack(padx=10, anchor="nw"))
-
-    menu.append(tkinter.Label(canvasFrame, text="Player 1's name", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
-    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["p1Name"], font="Helvetica 9 bold",
-        width = 32).pack(padx=10, anchor="nw"))
-
-    menu.append(tkinter.Label(canvasFrame, text="Player 2's name", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
-    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["p2Name"], font="Helvetica 9 bold",
-        width = 32).pack(padx=10, anchor="nw"))
-
-    menu.append(tkinter.Label(canvasFrame, text="Fall Speed (Milliseconds)", bg=colors["bg"],
-        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
-    menu.append(tkinter.Entry(canvasFrame, textvariable=settings["fall"], font="Helvetica 9 bold",
-        width = 8).pack(padx=10, anchor="nw"))
+    for item in [["Background Color (Hex Color)", "bg", 8], ["Text Color (Hex Color)", "text", 8],
+            ["Player 1's Color (Hex Color)", "p1", 8], ["Player 2's Color (Hex Color)", "p2", 8],
+            ["Player 1's name", "p1Name", 32], ["Player 2's name", "p2Name", 32],
+            ["Fall Speed (Milliseconds)", "fall", 8], ["Transparency (Number between 0 and 1)", "alpha", 5]]:
+        menu.append(tkinter.Label(canvasFrame, text=item[0], bg=colors["bg"],
+            fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
+        menu.append(tkinter.Entry(canvasFrame, textvariable=settings[item[1]], font="Helvetica 9 bold",
+            width = item[2]).pack(padx=10, anchor="nw"))
 
     menu.append(tkinter.Label(canvasFrame, text="\nConnect Four by Joe Baker\nhttps://github.com/JoeBaker/connect-four",
         bg=colors["bg"], fg="white", font="Helvetica 9 bold", justify="left").pack(padx=5, anchor="nw"))
