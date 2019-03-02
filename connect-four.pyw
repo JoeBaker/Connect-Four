@@ -44,7 +44,7 @@ class connectFour:
         {"x":900, "y":870, "bh":30, "bw+p":30, "bw+t":80, "b+t":14, "info":18, "grid":110, "pad":6},
         {"x":1010, "y":980, "bh":30, "bw+p":30, "bw+t":80, "b+t":14, "info":20, "grid":125, "pad":6}]
 
-    size = sizes[4]
+    size = sizes[10]
     root.geometry(str(size["x"])+"x"+str(size["y"]))
     root.minsize(width=size["x"], height=size["y"])
 
@@ -167,7 +167,7 @@ class connectFour:
             return True
         return False
 
-    def resetGrid(self):
+    def reloadGrid(self):
         for place in range(42):
             color = {-1:self.colors["p1"], 0:self.colors["bg"], 1:self.colors["p2"]}[self.grid[place]]
             self.buttons[place].config(bg=color, height=self.size["grid"], width=self.size["grid"])
@@ -220,7 +220,7 @@ class connectFour:
             self.settingsButton.config(width={True:self.size["bw+p"], False:self.size["bw+t"]}[self.images["images"]],
                 height=self.size["bh"], font="Helvetica "+str(self.size["b+t"])+" bold")
 
-        self.resetGrid(self)
+        self.reloadGrid(self)
         self.text.config(text=self.names[0]+"'s score: "+str(self.score[0])+"\n"+self.names[1]+"'s score: "+
             str(self.score[1])+"\n"+{-1:self.names[0], 1:self.names[1]}[self.turn]+"'s turn",
             font="Helvetica "+str(self.size["info"])+" bold")
@@ -349,6 +349,8 @@ class connectFour:
         menu.append(tkinter.Entry(canvasFrame, textvariable=settings[item[1]], font="Helvetica 9 bold",
             width = item[2]).pack(padx=10, anchor="nw"))
 
+    menu.append(tkinter.Label(canvasFrame, text="Grid size", bg=colors["bg"],
+        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
     menu.append(tkinter.Scale(canvasFrame, highlightthickness=0, activebackground=colors["bg"], length=300,
         orient="horizontal", highlightbackground=colors["bg"], to=21, from_=0,variable=settings["size"],
         bg=colors["bg"], fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
