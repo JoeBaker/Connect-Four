@@ -16,11 +16,37 @@ class connectFour:
     score = [0,0]
     turn = random.choice([-1,1])
     fall = 300
-
     root.title("Connect Four")
-    root.geometry("540x520")
     root["bg"] = colors["bg"]
-    root.minsize(width=540, height=520)
+
+    # Window sizes
+
+    sizes = [{"x":165, "y":190, "bh":20, "bw+p":20, "bw+t":20, "b+t":4, "info":7, "grid":15, "pad":1},
+        {"x":200, "y":225, "bh":25, "bw+p":25, "bw+t":40, "b+t":6, "info":8, "grid":20, "pad":1},
+        {"x":215, "y":240, "bh":25, "bw+p":25, "bw+t":40, "b+t":6, "info":8, "grid":20, "pad":2},
+        {"x":250, "y":275, "bh":30, "bw+p":30, "bw+t":50, "b+t":7, "info":8, "grid":25, "pad":2},
+        {"x":285, "y":300, "bh":30, "bw+p":30, "bw+t":50, "b+t":7, "info":8, "grid":30, "pad":2},
+        {"x":335, "y":350, "bh":30, "bw+p":30, "bw+t":50, "b+t":8, "info":9, "grid":35, "pad":3},
+        {"x":370, "y":375, "bh":30, "bw+p":30, "bw+t":50, "b+t":8, "info":9, "grid":40, "pad":3},
+        {"x":410, "y":410, "bh":30, "bw+p":30, "bw+t":50, "b+t":8, "info":9, "grid":45, "pad":3},
+        {"x":420, "y":420, "bh":30, "bw+p":30, "bw+t":50, "b+t":8, "info":9, "grid":45, "pad":4},
+        {"x":455, "y":450, "bh":30, "bw+p":30, "bw+t":60, "b+t":9, "info":9, "grid":50, "pad":4},
+        {"x":490, "y":480, "bh":30, "bw+p":30, "bw+t":60, "b+t":9, "info":9, "grid":55, "pad":4},
+        {"x":540, "y":520, "bh":30, "bw+p":30, "bw+t":60, "b+t":9, "info":9, "grid":60, "pad":5},
+        {"x":540, "y":520, "bh":30, "bw+p":30, "bw+t":60, "b+t":9, "info":10, "grid":60, "pad":5},
+        {"x":575, "y":560, "bh":30, "bw+p":30, "bw+t":60, "b+t":9, "info":11, "grid":65, "pad":5},
+        {"x":610, "y":585, "bh":30, "bw+p":30, "bw+t":60, "b+t":10, "info":11, "grid":70, "pad":5},
+        {"x":645, "y":625, "bh":30, "bw+p":30, "bw+t":70, "b+t":11, "info":12, "grid":75, "pad":5},
+        {"x":680, "y":655, "bh":30, "bw+p":30, "bw+t":70, "b+t":11, "info":13, "grid":80, "pad":5},
+        {"x":750, "y":720, "bh":30, "bw+p":30, "bw+t":70, "b+t":11, "info":14, "grid":90, "pad":5},
+        {"x":770, "y":745, "bh":30, "bw+p":30, "bw+t":70, "b+t":12, "info":15, "grid":90, "pad":6},
+        {"x":840, "y":810, "bh":30, "bw+p":30, "bw+t":80, "b+t":14, "info":16, "grid":100, "pad":6},
+        {"x":900, "y":870, "bh":30, "bw+p":30, "bw+t":80, "b+t":14, "info":18, "grid":110, "pad":6},
+        {"x":1010, "y":980, "bh":30, "bw+p":30, "bw+t":80, "b+t":14, "info":20, "grid":125, "pad":6}]
+
+    size = sizes[4]
+    root.geometry(str(size["x"])+"x"+str(size["y"]))
+    root.minsize(width=size["x"], height=size["y"])
 
     # Functions
 
@@ -117,8 +143,10 @@ class connectFour:
             name = "icon"
             self.root.title("Connect Four")
             self.updateSettings(self)
+            self.root.minsize(width=self.size["x"], height=self.size["y"])
         else:
             self.root.title("Connect Four - Settings")
+            self.root.minsize(width=490, height=480)
         try:
             self.root.iconbitmap(self.path("assets/"+name+".ico"))
         except Exception as e:
@@ -139,10 +167,11 @@ class connectFour:
             return True
         return False
 
-    def reColorGrid(self):
+    def resetGrid(self):
         for place in range(42):
             color = {-1:self.colors["p1"], 0:self.colors["bg"], 1:self.colors["p2"]}[self.grid[place]]
-            self.buttons[place].config(bg=color)
+            self.buttons[place].config(bg=color, height=self.size["grid"], width=self.size["grid"])
+            self.buttons[place].grid(padx=self.size["pad"], pady=self.size["pad"])
 
     def updateSettings(self):
         if self.isColor(self.settings["bg"].get()):
@@ -186,9 +215,15 @@ class connectFour:
             self.fall = 300
             self.settings["fall"].set("300")
 
-        self.reColorGrid(self)
+        if not self.size == self.sizes[int(self.settings["size"].get())]:
+            self.size = self.sizes[int(self.settings["size"].get())]
+            self.settingsButton.config(width={True:self.size["bw+p"], False:self.size["bw+t"]}[self.images["images"]],
+                height=self.size["bh"], font="Helvetica "+str(self.size["b+t"])+" bold")
+
+        self.resetGrid(self)
         self.text.config(text=self.names[0]+"'s score: "+str(self.score[0])+"\n"+self.names[1]+"'s score: "+
-            str(self.score[1])+"\n"+{-1:self.names[0], 1:self.names[1]}[self.turn]+"'s turn")
+            str(self.score[1])+"\n"+{-1:self.names[0], 1:self.names[1]}[self.turn]+"'s turn",
+            font="Helvetica "+str(self.size["info"])+" bold")
 
     # Lambdas
 
@@ -223,18 +258,18 @@ class connectFour:
     textFrame = tkinter.Frame(frame["game"], bg=colors["bg"], height=1, width=1)
     textFrame.grid(column=0, row=0, sticky="n")
     text = tkinter.Label(textFrame, text="Red's score: 0\nYellow's score: 0\n"+{-1:"Red", 1:"Yellow"}[turn]+"'s turn",
-        bg=colors["bg"], fg="white", font="Helvetica 9 bold", padx=5, pady=5)
+        bg=colors["bg"], fg="white", font="Helvetica "+str(size["info"])+" bold", padx=5, pady=5)
     text.grid(column=1, row=0, sticky="n")
     
     settingsFrame = tkinter.Frame(frame["game"], bg=colors["bg"], height=1, width=1, padx=10, pady=10)
     settingsFrame.grid(column=0, row=0, sticky="nw")
     if images["images"]:
-        settingsButton = tkinter.Button(settingsFrame, height=30, width=30, bg=colors["bg"], image=images["settings"],
-            command=lambda name="settings": connectFour.changeWindow(name), borderwidth=0)
+        settingsButton = tkinter.Button(settingsFrame, height=size["bh"], width=size["bw+p"], bg=colors["bg"],
+            image=images["settings"], command=lambda name="settings": connectFour.changeWindow(name), borderwidth=0)
     else:
-        settingsButton = tkinter.Button(settingsFrame, height=30, width=60, bg=colors["bg"], image=images["none"],
-            command=lambda name="settings": connectFour.changeWindow(name), borderwidth=0, text="Settings",
-            compound="center", font="Helvetica 9 bold", fg="#ffffff")
+        settingsButton = tkinter.Button(settingsFrame, height=size["bh"], width=size["bw+t"], bg=colors["bg"],
+            image=images["none"], command=lambda name="settings": connectFour.changeWindow(name), borderwidth=0,
+            text="Settings", compound="center", font="Helvetica "+str(size["b+t"])+" bold", fg="#ffffff")
     settingsButton.pack(side=tkinter.LEFT, anchor="nw")
 
     mainGrid = tkinter.Frame(frame["game"], bg=colors["bg"])
@@ -243,9 +278,9 @@ class connectFour:
     buttons = []
     for row in range(6):
         for column in range(7):
-            buttons.append(tkinter.Button(mainGrid, height=60, width=60, bg=colors["bg"],
+            buttons.append(tkinter.Button(mainGrid, height=size["grid"], width=size["grid"], bg=colors["bg"],
                 command=lambda arg=column: connectFour.buttonPressed(arg), image=images["none"]))
-            buttons[(row*7)+column].grid(column=column, row=row, padx=5, pady=5)
+            buttons[(row*7)+column].grid(column=column, row=row, padx=size["pad"], pady=size["pad"])
 
     # Settings Page
 
@@ -279,7 +314,7 @@ class connectFour:
     home.pack(side=tkinter.LEFT, anchor="nw")
 
     menu = []
-    variables = ["bg", "text", "p1", "p2", "p1Name", "p2Name", "fall", "alpha"]
+    variables = ["bg", "text", "p1", "p2", "p1Name", "p2Name", "fall", "alpha", "size"]
     settings = {}
     for var in variables:
         settings[var] = tkinter.StringVar()
@@ -293,6 +328,7 @@ class connectFour:
     settings["p2Name"].set(names[1])
     settings["fall"].set("300")
     settings["alpha"].set("1")
+    settings["size"].set("10")
 
     canvas = tkinter.Canvas(frame["settings"], height=1000, bg=colors["bg"],
         scrollregion=(0, 0, 0, 1000), highlightthickness=0)
@@ -312,6 +348,10 @@ class connectFour:
             fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
         menu.append(tkinter.Entry(canvasFrame, textvariable=settings[item[1]], font="Helvetica 9 bold",
             width = item[2]).pack(padx=10, anchor="nw"))
+
+    menu.append(tkinter.Scale(canvasFrame, highlightthickness=0, activebackground=colors["bg"], length=300,
+        orient="horizontal", highlightbackground=colors["bg"], to=21, from_=0,variable=settings["size"],
+        bg=colors["bg"], fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
 
     menu.append(tkinter.Label(canvasFrame, text="\nConnect Four by Joe Baker\nhttps://github.com/JoeBaker/connect-four",
         bg=colors["bg"], fg="white", font="Helvetica 9 bold", justify="left").pack(padx=5, anchor="nw"))
