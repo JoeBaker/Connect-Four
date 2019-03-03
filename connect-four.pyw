@@ -18,6 +18,7 @@ class connectFour:
     fall = 300
     root.title("Connect Four")
     root["bg"] = colors["bg"]
+    messagebox = True
 
     # Window sizes
 
@@ -225,9 +226,12 @@ class connectFour:
             str(self.score[1])+"\n"+{-1:self.names[0], 1:self.names[1]}[self.turn]+"'s turn",
             font="Helvetica "+str(self.size["info"])+" bold")
 
+        self.messagebox = int(self.settings["messagebox"].get())
+
     # Lambdas
 
-    message = lambda title, message: tkinter.messagebox.showinfo(title=title, message=message)
+    message = (lambda title, message: tkinter.messagebox.showinfo(title=title, message=message)
+        if connectFour.messagebox else False)
 
     # Load Button Images
 
@@ -314,7 +318,7 @@ class connectFour:
     home.pack(side=tkinter.LEFT, anchor="nw")
 
     menu = []
-    variables = ["bg", "text", "p1", "p2", "p1Name", "p2Name", "fall", "alpha", "size"]
+    variables = ["bg", "text", "p1", "p2", "p1Name", "p2Name", "fall", "alpha", "size", "messagebox"]
     settings = {}
     for var in variables:
         settings[var] = tkinter.StringVar()
@@ -329,6 +333,7 @@ class connectFour:
     settings["fall"].set("300")
     settings["alpha"].set("1")
     settings["size"].set("10")
+    settings["messagebox"].set("1")
 
     canvas = tkinter.Canvas(frame["settings"], height=1000, bg=colors["bg"],
         scrollregion=(0, 0, 0, 1000), highlightthickness=0)
@@ -352,8 +357,13 @@ class connectFour:
     menu.append(tkinter.Label(canvasFrame, text="Grid size", bg=colors["bg"],
         fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
     menu.append(tkinter.Scale(canvasFrame, highlightthickness=0, activebackground=colors["bg"], length=300,
-        orient="horizontal", highlightbackground=colors["bg"], to=21, from_=0,variable=settings["size"],
+        orient="horizontal", highlightbackground=colors["bg"], to=21, from_=0, variable=settings["size"],
         bg=colors["bg"], fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
+
+    menu.append(tkinter.Label(canvasFrame, text="Show messagebox", bg=colors["bg"],
+        fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
+    menu.append(tkinter.Checkbutton(canvasFrame, activebackground=colors["bg"],
+        bg=colors["bg"], font="Helvetica 9 bold", variable=settings["messagebox"]).pack(padx=5, anchor="nw"))
 
     menu.append(tkinter.Label(canvasFrame, text="\nConnect Four by Joe Baker\nhttps://github.com/JoeBaker/connect-four",
         bg=colors["bg"], fg="white", font="Helvetica 9 bold", justify="left").pack(padx=5, anchor="nw"))
