@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import tkinter
 from tkinter import messagebox
 import random
@@ -141,17 +143,19 @@ class connectFour:
         self = connectFour
         self.frame[name].tkraise()
         if name == "game":
-            name = "icon"
+            name = "connect-four"
             self.root.title("Connect Four")
             self.updateSettings(self)
             self.root.minsize(width=self.size["x"], height=self.size["y"])
         else:
             self.root.title("Connect Four - Settings")
             self.root.minsize(width=490, height=480)
+        
         try:
-            self.root.iconbitmap(self.path("assets/"+name+".ico"))
-        except Exception as e:
-            print(e)
+            icon = tkinter.PhotoImage(file=self.path("assets/"+name+".gif"))
+            self.root.tk.call("wm", "iconphoto", self.root._w, icon)
+        except Exception as e: print(e)
+
 
     def path(relativePath):
         if hasattr(sys, '_MEIPASS'):
@@ -246,9 +250,10 @@ class connectFour:
         print(e, "\nAn error has occoured loading the image files.\nText will be used instead.")
 
     try:
-        root.iconbitmap(path("assets/icon.ico"))
+        icon = tkinter.PhotoImage(file=path("assets/connect-four.gif"))
+        root.tk.call("wm", "iconphoto", root._w, icon)
     except Exception as e: print(e)
-    
+
     # Game Page
 
     frame = {}
@@ -303,7 +308,7 @@ class connectFour:
     
     settingsTitleFrame = tkinter.Frame(settingsHeaderGrid, bg=colors["bg"], height=1, width=1)
     settingsTitleFrame.grid(column=1, row=0, sticky="n")
-    settingsTitle = tkinter.Label(settingsTitleFrame, text="Settings", bg=colors["bg"], fg="white", font="Impact 28")
+    settingsTitle = tkinter.Label(settingsTitleFrame, text="Settings", bg=colors["bg"], fg="white", font="Consolas 28 bold")
     settingsTitle.grid(column=0, row=0, sticky="n")
     
     homeFrame = tkinter.Frame(settingsHeaderGrid, bg=colors["bg"], height=1, width=1, padx=10, pady=10)
