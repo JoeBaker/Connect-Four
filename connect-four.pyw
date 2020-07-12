@@ -113,8 +113,7 @@ class connectFour:
             self.message(title, message)
             self.resetGrid(self)
         self.turn = 0 - self.turn
-        self.text.config(text=self.names[0]+"'s score: "+str(self.score[0])+"\n"+self.names[1]+"'s score: "+
-            str(self.score[1])+"\n"+{-1:self.names[0], 1:self.names[1]}[self.turn]+"'s turn")
+        self.updateInfo(self)
 
     def lockButtons(self, lock):
         for i in range(42):
@@ -129,8 +128,7 @@ class connectFour:
             self.message("You can't go here", "You can't go here because this column is full."+
                 "\nTry going somewhere else.")
             self.lockButtons(self, False)
-            self.text.config(text=self.names[0]+"'s score: "+str(self.score[0])+"\n"+self.names[1]+"'s score: "+
-                str(self.score[1])+"\n"+{-1:self.names[0], 1:self.names[1]}[self.turn]+"'s turn")
+            self.updateInfo(self)
         else:
             self.fallAnimation(self, column)
 
@@ -144,7 +142,7 @@ class connectFour:
             self.root.minsize(width=self.size["x"], height=self.size["y"])
         else:
             self.root.title("Connect Four - Settings")
-            self.root.minsize(width=490, height=480)
+            self.root.minsize(width=264, height=256)
 
         try:
             icon = tkinter.PhotoImage(file=self.path("assets/"+name+".gif"))
@@ -220,11 +218,19 @@ class connectFour:
             height=self.size["bh"], font="Helvetica "+str(self.size["b+t"])+" bold")
 
         self.reloadGrid(self)
+        self.updateInfo(self)
+        self.messagebox = int(self.settings["messagebox"].get())
+
+    def updateInfo(self):
         self.text.config(text=self.names[0]+"'s score: "+str(self.score[0])+"\n"+self.names[1]+"'s score: "+
             str(self.score[1])+"\n"+{-1:self.names[0], 1:self.names[1]}[self.turn]+"'s turn",
             font="Helvetica "+str(self.size["info"])+" bold")
 
-        self.messagebox = int(self.settings["messagebox"].get())
+    def resetScores(self):
+        self.message("Scores Reset", "Scores reset\n"+self.names[0]+"'s old score: "+str(self.score[0])+
+            "\n"+self.names[1]+"'s old score: "+str(self.score[1]))
+        self.score = [0,0]
+        self.updateInfo(self)
 
     # Lambdas
 
@@ -346,8 +352,8 @@ class connectFour:
 
     for item in [["Background Color (Hex Color)", "bg", 8], ["Text Color (Hex Color)", "text", 8],
             ["Player 1's Color (Hex Color)", "p1", 8], ["Player 2's Color (Hex Color)", "p2", 8],
-            ["Player 1's name", "p1Name", 32], ["Player 2's name", "p2Name", 32],
-            ["Fall Speed (Milliseconds)", "fall", 8], ["Transparency (Number between 0 and 1)", "alpha", 5]]:
+            ["Player 1's name", "p1Name", 31], ["Player 2's name", "p2Name", 31],
+            ["Fall Speed (Milliseconds)", "fall", 8], ["Transparency (0 to 1)", "alpha", 5]]:
         menu.append(tkinter.Label(canvasFrame, text=item[0], bg=colors["bg"],
             fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
         menu.append(tkinter.Entry(canvasFrame, textvariable=settings[item[1]], font="Helvetica 9 bold",
@@ -355,7 +361,7 @@ class connectFour:
 
     menu.append(tkinter.Label(canvasFrame, text="Grid size", bg=colors["bg"],
         fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
-    menu.append(tkinter.Scale(canvasFrame, highlightthickness=0, activebackground=colors["bg"], length=300,
+    menu.append(tkinter.Scale(canvasFrame, highlightthickness=0, activebackground=colors["bg"], length=228,
         orient="horizontal", highlightbackground=colors["bg"], to=50, from_=0, variable=settings["size"],
         bg=colors["bg"], fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
 
@@ -364,8 +370,15 @@ class connectFour:
     menu.append(tkinter.Checkbutton(canvasFrame, activebackground=colors["bg"],
         bg=colors["bg"], font="Helvetica 9 bold", variable=settings["messagebox"]).pack(padx=5, anchor="nw"))
 
-    menu.append(tkinter.Label(canvasFrame, text="\nConnect Four by Joe Baker\nhttps://github.com/JoeBaker/connect-four",
+    menu.append(tkinter.Button(canvasFrame, height=1, width=12, bg=colors["bg"], fg=colors["text"],
+        text="Reset scores", command=lambda name="settings": connectFour.resetScores(connectFour)).pack(padx=5, pady=30, anchor="nw"))
+
+    menu.append(tkinter.Label(canvasFrame, text="Connect Four by Joe Baker\nhttps://github.com/JoeBaker/connect-four",
         bg=colors["bg"], fg="white", font="Helvetica 9 bold", justify="left").pack(padx=5, anchor="nw"))
+
+    def _on_mousewheel(event):
+        connectFour.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+    canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
 
 connectFour.frame["game"].tkraise()
