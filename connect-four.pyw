@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import tkinter
 from tkinter import messagebox
@@ -17,7 +17,7 @@ class connectFour:
     grid = [0]*42
     score = [0,0]
     turn = random.choice([-1,1])
-    fall = 300
+    fall = 80
     root.title("Connect Four")
     root["bg"] = colors["bg"]
     messagebox = True
@@ -150,7 +150,7 @@ class connectFour:
         else:
             self.root.title("Connect Four - Settings")
             self.root.minsize(width=490, height=480)
-        
+
         try:
             icon = tkinter.PhotoImage(file=self.path("assets/"+name+".gif"))
             self.root.tk.call("wm", "iconphoto", self.root._w, icon)
@@ -207,7 +207,7 @@ class connectFour:
         try:
             if 0 < float(self.settings["alpha"].get()) <= 1:
                 self.root.attributes('-alpha', self.settings["alpha"].get())
-            else:    
+            else:
                 self.root.attributes('-alpha', 1)
                 self.settings["alpha"].set("1")
         except:
@@ -217,8 +217,8 @@ class connectFour:
         try:
             self.fall = int(self.settings["fall"].get())
         except:
-            self.fall = 300
-            self.settings["fall"].set("300")
+            self.fall = 80
+            self.settings["fall"].set("80")
 
         if not self.size == self.sizes[int(self.settings["size"].get())]:
             self.size = self.sizes[int(self.settings["size"].get())]
@@ -269,7 +269,7 @@ class connectFour:
     text = tkinter.Label(textFrame, text="Red's score: 0\nYellow's score: 0\n"+{-1:"Red", 1:"Yellow"}[turn]+"'s turn",
         bg=colors["bg"], fg="white", font="Helvetica "+str(size["info"])+" bold", padx=5, pady=5)
     text.grid(column=1, row=0, sticky="n")
-    
+
     settingsFrame = tkinter.Frame(frame["game"], bg=colors["bg"], height=1, width=1, padx=10, pady=10)
     settingsFrame.grid(column=0, row=0, sticky="nw")
     if images["images"]:
@@ -305,12 +305,12 @@ class connectFour:
 
     alignmentFrame = tkinter.Frame(settingsHeaderGrid, bg=colors["bg"], width=34)
     alignmentFrame.grid(column=2, row=0, sticky="ne")
-    
+
     settingsTitleFrame = tkinter.Frame(settingsHeaderGrid, bg=colors["bg"], height=1, width=1)
     settingsTitleFrame.grid(column=1, row=0, sticky="n")
     settingsTitle = tkinter.Label(settingsTitleFrame, text="Settings", bg=colors["bg"], fg="white", font="Consolas 28 bold")
     settingsTitle.grid(column=0, row=0, sticky="n")
-    
+
     homeFrame = tkinter.Frame(settingsHeaderGrid, bg=colors["bg"], height=1, width=1, padx=10, pady=10)
     homeFrame.grid(column=0, row=0, sticky="nw")
     if images["images"]:
@@ -335,7 +335,7 @@ class connectFour:
     settings["p2"].set("#EEE82C")
     settings["p1Name"].set(names[0])
     settings["p2Name"].set(names[1])
-    settings["fall"].set("300")
+    settings["fall"].set("80")
     settings["alpha"].set("1")
     settings["size"].set("10")
     settings["messagebox"].set("1")
