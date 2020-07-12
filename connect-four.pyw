@@ -24,30 +24,25 @@ class connectFour:
 
     # Window sizes
 
-    sizes = [{"x":165, "y":190, "bh":20, "bw+p":20, "bw+t":20, "b+t":4, "info":7, "grid":15, "pad":1},
-        {"x":200, "y":225, "bh":25, "bw+p":25, "bw+t":40, "b+t":6, "info":8, "grid":20, "pad":1},
-        {"x":215, "y":240, "bh":25, "bw+p":25, "bw+t":40, "b+t":6, "info":8, "grid":20, "pad":2},
-        {"x":250, "y":275, "bh":30, "bw+p":30, "bw+t":50, "b+t":7, "info":8, "grid":25, "pad":2},
-        {"x":285, "y":300, "bh":30, "bw+p":30, "bw+t":50, "b+t":7, "info":8, "grid":30, "pad":2},
-        {"x":335, "y":350, "bh":30, "bw+p":30, "bw+t":50, "b+t":8, "info":9, "grid":35, "pad":3},
-        {"x":370, "y":375, "bh":30, "bw+p":30, "bw+t":50, "b+t":8, "info":9, "grid":40, "pad":3},
-        {"x":410, "y":410, "bh":30, "bw+p":30, "bw+t":50, "b+t":8, "info":9, "grid":45, "pad":3},
-        {"x":420, "y":420, "bh":30, "bw+p":30, "bw+t":50, "b+t":8, "info":9, "grid":45, "pad":4},
-        {"x":455, "y":450, "bh":30, "bw+p":30, "bw+t":60, "b+t":9, "info":9, "grid":50, "pad":4},
-        {"x":490, "y":480, "bh":30, "bw+p":30, "bw+t":60, "b+t":9, "info":9, "grid":55, "pad":4},
-        {"x":540, "y":520, "bh":30, "bw+p":30, "bw+t":60, "b+t":9, "info":9, "grid":60, "pad":5},
-        {"x":540, "y":520, "bh":30, "bw+p":30, "bw+t":60, "b+t":9, "info":10, "grid":60, "pad":5},
-        {"x":575, "y":560, "bh":30, "bw+p":30, "bw+t":60, "b+t":9, "info":11, "grid":65, "pad":5},
-        {"x":610, "y":585, "bh":30, "bw+p":30, "bw+t":60, "b+t":10, "info":11, "grid":70, "pad":5},
-        {"x":645, "y":625, "bh":30, "bw+p":30, "bw+t":70, "b+t":11, "info":12, "grid":75, "pad":5},
-        {"x":680, "y":655, "bh":30, "bw+p":30, "bw+t":70, "b+t":11, "info":13, "grid":80, "pad":5},
-        {"x":750, "y":720, "bh":30, "bw+p":30, "bw+t":70, "b+t":11, "info":14, "grid":90, "pad":5},
-        {"x":770, "y":745, "bh":30, "bw+p":30, "bw+t":70, "b+t":12, "info":15, "grid":90, "pad":6},
-        {"x":840, "y":810, "bh":30, "bw+p":30, "bw+t":80, "b+t":14, "info":16, "grid":100, "pad":6},
-        {"x":900, "y":870, "bh":30, "bw+p":30, "bw+t":80, "b+t":14, "info":18, "grid":110, "pad":6},
-        {"x":1010, "y":980, "bh":30, "bw+p":30, "bw+t":80, "b+t":14, "info":20, "grid":125, "pad":6}]
+    def updateSize(sizeMultiplyer):
+        size = {}
+        size["x"] = 165 + (33 * sizeMultiplyer)
+        size["y"] = 200 + (30 * sizeMultiplyer)
+        size["bh"] = 20 + (((sizeMultiplyer) // 4) * 5)
+        if sizeMultiplyer == 0:
+            size["bw+p"] = 20
+        elif sizeMultiplyer in [1,2]:
+            size["bw+p"] = 25
+        else:
+            size["bw+p"] = 30
+        size["bw+t"] = 20 + (((sizeMultiplyer + 1) // 3) * 10)
+        size["b+t"] = 4 + ((sizeMultiplyer + 4) // 3)
+        size["info"] = 7 + ((sizeMultiplyer + 2) // 2)
+        size["grid"] = 15 + (4 * sizeMultiplyer)
+        size["pad"] = 1 + (((sizeMultiplyer) // 6) * 2)
+        return size
 
-    size = sizes[10]
+    size = updateSize(10)
     root.geometry(str(size["x"])+"x"+str(size["y"]))
     root.minsize(width=size["x"], height=size["y"])
 
@@ -220,10 +215,9 @@ class connectFour:
             self.fall = 80
             self.settings["fall"].set("80")
 
-        if not self.size == self.sizes[int(self.settings["size"].get())]:
-            self.size = self.sizes[int(self.settings["size"].get())]
-            self.settingsButton.config(width={True:self.size["bw+p"], False:self.size["bw+t"]}[self.images["images"]],
-                height=self.size["bh"], font="Helvetica "+str(self.size["b+t"])+" bold")
+        self.size = self.updateSize(int(self.settings["size"].get()))
+        self.settingsButton.config(width={True:self.size["bw+p"], False:self.size["bw+t"]}[self.images["images"]],
+            height=self.size["bh"], font="Helvetica "+str(self.size["b+t"])+" bold")
 
         self.reloadGrid(self)
         self.text.config(text=self.names[0]+"'s score: "+str(self.score[0])+"\n"+self.names[1]+"'s score: "+
@@ -362,7 +356,7 @@ class connectFour:
     menu.append(tkinter.Label(canvasFrame, text="Grid size", bg=colors["bg"],
         fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
     menu.append(tkinter.Scale(canvasFrame, highlightthickness=0, activebackground=colors["bg"], length=300,
-        orient="horizontal", highlightbackground=colors["bg"], to=21, from_=0, variable=settings["size"],
+        orient="horizontal", highlightbackground=colors["bg"], to=50, from_=0, variable=settings["size"],
         bg=colors["bg"], fg="white", font="Helvetica 9 bold").pack(padx=5, anchor="nw"))
 
     menu.append(tkinter.Label(canvasFrame, text="Show messagebox", bg=colors["bg"],
